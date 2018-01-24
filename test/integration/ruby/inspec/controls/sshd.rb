@@ -5,27 +5,23 @@ control 'ssh-daemon' do
 
   ciphers = case os.name
             when 'centos', 'redhat', 'oracle'
-              case
-              when os.release.to_s =~ /^6/
+              if os.release.to_s =~ /^6/
                 %w[aes128-ctr
                    aes192-ctr
                    aes256-ctr]
-              when os.release.to_s =~ /^7/
+              elsif os.release.to_s =~ /^7/
                 %w[chacha20-poly1305@openssh.com
                    aes128-ctr
                    aes192-ctr
                    aes256-ctr
                    aes128-gcm@openssh.com
                    aes256-gcm@openssh.com]
-              else
-                nil
               end
             end
 
   macs = case os.name
          when 'centos', 'redhat', 'oracle'
-           case
-           when os.release.to_s =~ /^6/
+           if os.release.to_s =~ /^6/
              %w[hmac-sha1
                 umac-64@openssh.com
                 hmac-ripemd160
@@ -33,7 +29,7 @@ control 'ssh-daemon' do
                 hmac-sha2-256
                 hmac-sha2-512
                 hmac-ripemd160@openssh.com]
-           when os.release.to_s =~ /^7/
+           elsif os.release.to_s =~ /^7/
              %w[umac-64-etm@openssh.com
                 umac-128-etm@openssh.com
                 hmac-sha2-256-etm@openssh.com
@@ -45,10 +41,8 @@ control 'ssh-daemon' do
                 hmac-sha2-512
                 hmac-sha1
                 hmac-sha1-etm@openssh.com]
-           else
-             nil
-          end
-        end
+           end
+         end
 
   describe file('/etc/ssh/sshd_config') do
     it { should exist }

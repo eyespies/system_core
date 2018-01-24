@@ -49,50 +49,44 @@ accept_env += ' LC_IDENTIFICATION LC_ALL LANGUAGE XMODIFIERS'
 
 ciphers = case node['platform_family']
           when 'rhel'
-            case
-            when node['platform_version'] =~ /^6/
+            if node['platform_version'] =~ /^6/
               %w[aes128-ctr
                  aes192-ctr
                  aes256-ctr]
-            when node['platform_version'] =~ /^7/
+            elsif node['platform_version'] =~ /^7/
               %w[chacha20-poly1305@openssh.com
                  aes128-ctr
                  aes192-ctr
                  aes256-ctr
                  aes128-gcm@openssh.com
                  aes256-gcm@openssh.com]
-            else
-              nil
             end
           end
 
 macs = case node['platform_family']
-          when 'rhel'
-            case
-            when node['platform_version'] =~ /^6/
-              %w[hmac-sha1
-                 umac-64@openssh.com
-                 hmac-ripemd160
-                 hmac-sha1-96
-                 hmac-sha2-256
-                 hmac-sha2-512
-                 hmac-ripemd160@openssh.com]
-            when node['platform_version'] =~ /^7/
-              %w[umac-64-etm@openssh.com
-                 umac-128-etm@openssh.com
-                 hmac-sha2-256-etm@openssh.com
-                 hmac-sha2-512-etm@openssh.com
-                 hmac-sha1-etm@openssh.com
-                 umac-64@openssh.com
-                 umac-128@openssh.com
-                 hmac-sha2-256
-                 hmac-sha2-512
-                 hmac-sha1
-                 hmac-sha1-etm@openssh.com]
-            else
-              nil
-            end
-          end
+       when 'rhel'
+         if node['platform_version'] =~ /^6/
+           %w[hmac-sha1
+              umac-64@openssh.com
+              hmac-ripemd160
+              hmac-sha1-96
+              hmac-sha2-256
+              hmac-sha2-512
+              hmac-ripemd160@openssh.com]
+         elsif node['platform_version'] =~ /^7/
+           %w[umac-64-etm@openssh.com
+              umac-128-etm@openssh.com
+              hmac-sha2-256-etm@openssh.com
+              hmac-sha2-512-etm@openssh.com
+              hmac-sha1-etm@openssh.com
+              umac-64@openssh.com
+              umac-128@openssh.com
+              hmac-sha2-256
+              hmac-sha2-512
+              hmac-sha1
+              hmac-sha1-etm@openssh.com]
+         end
+       end
 
 node.override['openssh']['server']['banner']                            = '/etc/ssh/banner'
 node.override['openssh']['server']['login_grace_time']                  = '1m'
