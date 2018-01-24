@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-# rubocop:disable Metrics/BlockLength
 describe 'system_core::papertrail' do
   packages = {
     'centos' => {
@@ -22,18 +21,18 @@ describe 'system_core::papertrail' do
         before do
           # Mock accepting the include_recipe commands
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('system_core::rsyslog')
-          stub_command("test -e /etc/init.d/td-agent").and_return(true)
         end
 
         let(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.override['environment'] = 'dev'
+          runner.node.override['system_core']['papertrail']['enabled'] = true
           runner.converge(described_recipe) do
             runner.resource_collection.insert(Chef::Resource::Service.new(packages[platform]['rsyslog-service'], runner.run_context))
           end
         end
 
-        it 'should reference the rsyslog cookbook' do
+        it 'should run the rsyslog cookbook' do
           expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('system_core::rsyslog')
           chef_run
         end
@@ -60,20 +59,10 @@ describe 'system_core::papertrail' do
         end
 
         it "Should create the Papertrail custom rsyslog configuration and notify the #{packages[platform]['rsyslog-service']} service" do
-          expect(chef_run).to create_cookbook_file '/etc/rsyslog.d/22-papertrail.conf'
+          expect(chef_run).to create_template '/etc/rsyslog.d/22-papertrail.conf'
 
-          file = chef_run.cookbook_file('/etc/rsyslog.d/22-papertrail.conf')
+          file = chef_run.template('/etc/rsyslog.d/22-papertrail.conf')
           expect(file).to notify("service[#{packages[platform]['rsyslog-service']}]").to(:restart).delayed
-        end
-
-        it 'should delete any existing loggly configuration' do
-          expect(chef_run).to delete_file '/etc/rsyslog.d/22-loggly.conf'
-        end
-
-        # TODO: This is only true if /etc/init.d/td-agent exists
-        it 'should stop the existing TreasureData agent' do
-          expect(chef_run).to stop_service 'td-agent'
-          expect(chef_run).to disable_service 'td-agent'
         end
 
         it 'should not display a log message at the warning level' do
@@ -85,7 +74,6 @@ describe 'system_core::papertrail' do
         before do
           # Mock accepting the include_recipe commands
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('system_core::rsyslog')
-          stub_command("test -e /etc/init.d/td-agent").and_return(true)
         end
 
         let(:chef_run) do
@@ -97,7 +85,7 @@ describe 'system_core::papertrail' do
           end
         end
 
-        it 'should not reference the rsyslog cookbook' do
+        it 'should not run the rsyslog cookbook' do
           expect_any_instance_of(Chef::Recipe).to_not receive(:include_recipe).with('system_core::rsyslog')
           chef_run
         end
@@ -124,20 +112,10 @@ describe 'system_core::papertrail' do
         end
 
         it "Should not create the Papertrail custom rsyslog configuration and notify the #{packages[platform]['rsyslog-service']} service" do
-          expect(chef_run).to_not create_cookbook_file '/etc/rsyslog.d/22-papertrail.conf'
+          expect(chef_run).to_not create_template '/etc/rsyslog.d/22-papertrail.conf'
 
-          file = chef_run.cookbook_file('/etc/rsyslog.d/22-papertrail.conf')
+          file = chef_run.template('/etc/rsyslog.d/22-papertrail.conf')
           expect(file).to_not notify("service[#{packages[platform]['rsyslog-service']}]").to(:restart).delayed
-        end
-
-        it 'should not delete any existing loggly configuration' do
-          expect(chef_run).to_not delete_file '/etc/rsyslog.d/22-loggly.conf'
-        end
-
-        # TODO: This is only true if /etc/init.d/td-agent exists
-        it 'should not stop the existing TreasureData agent' do
-          expect(chef_run).to_not stop_service 'td-agent'
-          expect(chef_run).to_not disable_service 'td-agent'
         end
 
         it 'should display a log message at the warning level' do
