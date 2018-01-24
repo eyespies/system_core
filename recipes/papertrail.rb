@@ -46,24 +46,13 @@ if node['system_core']['papertrail']['enabled']
   end
 
   # TODO: Make the file and service names attributes
-  cookbook_file '/etc/rsyslog.d/22-papertrail.conf' do
+  template '/etc/rsyslog.d/22-papertrail.conf' do
     source '22-papertrail.conf'
     owner 'root'
     group 'root'
     mode '0644'
     action :create
     notifies :restart, 'service[rsyslog]', :delayed
-  end
-
-  # TODO: Make the file name an attribute
-  file '/etc/rsyslog.d/22-loggly.conf' do
-    action :delete
-  end
-
-  # TODO: Make the service name and file path an attribute
-  service 'td-agent' do
-    action [:stop, :disable]
-    only_if 'test -e /etc/init.d/td-agent'
   end
 else
   log 'papertrail-disabled' do
