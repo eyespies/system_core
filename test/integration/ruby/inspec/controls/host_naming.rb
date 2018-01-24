@@ -19,7 +19,7 @@ domain = if attributes['system_core'].key?('domain')
            attributes['system_core']['domain']
          else
            # Default if no domain is present in the JSON file
-           'linux.example.com'
+           ''
          end
 
 # Check the domainname
@@ -29,5 +29,5 @@ end
 
 # Check the hostname
 describe command('hostname -f') do
-  its(:stdout) { should match(/^#{hostname}.#{domain}$/i) }
+  its(:stdout) { should match(/^#{hostname}#{domain == '' ? '' : ".#{domain}"}$/i) }
 end
