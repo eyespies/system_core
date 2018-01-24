@@ -8,7 +8,7 @@ group :test do
   gem 'minitest', '~> 5.5'
   gem 'overcommit'
   gem 'rake', '~> 10'
-  gem 'rubocop', '~> 0.34.0'
+  gem 'rubocop', '~> 0.49.0'
   gem 'simplecov', '~> 0.10'
   gem 'tomlrb'
 end
