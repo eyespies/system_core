@@ -1,0 +1,107 @@
+---
+driver:
+  name: vagrant
+  customize:
+    memory: 512
+    cpus: 1
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: <%= ENV.has_key?('CHEF_VERSION') ? ENV['CHEF_VERSION'] : true %>
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: centos-6.9
+  - name: centos-7.3
+  - name: oracle-6.9
+  - name: oracle-7.3
+    driver_config:
+      box: bento/oracle-7.3
+
+suites:
+  - name: default
+    data_bags_path: "../../data_bags"
+    run_list:
+      - recipe[system_core::default]
+      - recipe[system_core::repos]
+      - recipe[system_core::awscli]
+      - recipe[system_core::bash]
+      - recipe[system_core::postfix]
+      - recipe[system_core::ntp]
+      - recipe[system_core::selinux]
+  - name: base
+    data_bags_path: "../../data_bags"
+    run_list:
+      - recipe[system_core::default]
+      - recipe[system_core::repos]
+      - recipe[system_core::awscli]
+      - recipe[system_core::bash]
+      - recipe[system_core::postfix]
+      - recipe[system_core::ntp]
+      - recipe[system_core::selinux]
+      - recipe[system_core::ssh]
+      - recipe[system_core::logrotate]
+      - recipe[system_core::user_ssh]
+    attributes:
+      # TODO: For the ENV vars, create a hidden file called '.secrets' from which the values will be read; this
+      # avoids having to reset the values everytime a new terminal is opened.
+      system_core:
+        ssh:
+          user_config:
+            root:
+              hosts:
+                \*:
+                  SendEnv: "LANG LC_*"
+                  ForwardAgent: "yes"
+                  HostkeyAlgorithms: "+ssh-ed25519,ssh-rsa,ssh-dss,ecdsa-sha2-nistp256"
+                  UserKnownHostsFile: "/dev/null"
+                  StrictHostKeyChecking: "no"
+              keys:
+                id_rsa-test:
+                  owner: root
+                  ssh_key_bucket: "<%= ENV['SSH_KEY_BUCKET'] %>"
+                  ssh_key_path: "<%= ENV.key?('ROOT_SSH_KEY_PATH') ? ENV['ROOT_SSH_KEY_PATH'] : 'ssh-keys/root' %>"
+        aws:
+          profiles:
+            default:
+              output_format: "json"
+              region: "<%= ENV.key('AWS_REGION') ? ENV['AWS_REGION'] : 'us-east-1' %>"
+              access_key: "<%= ENV['AWS_ACCESS_KEY_ID'] %>"
+              secret_key: "<%= ENV['AWS_SECRET_ACCESS_KEY'] %>"
+  - name: logging
+    data_bags_path: "../../data_bags"
+    run_list:
+      - recipe[system_core::default]
+      - recipe[system_core::rsyslog]
+      - recipe[system_core::logrotate]
+      - recipe[system_core::papertrail]
+      - recipe[logrotate::default]
+  - name: ruby
+    data_bags_path: "../../data_bags"
+    run_list:
+      - recipe[system_core::default]
+      - recipe[system_core::rbenv]
+  - name: altdomain
+    data_bags_path: "../../data_bags"
+    run_list:
+      - recipe[system_core::default]
+      - recipe[system_core::repos]
+      - recipe[system_core::awscli]
+      - recipe[system_core::bash]
+      - recipe[system_core::postfix]
+      - recipe[system_core::ntp]
+      - recipe[system_core::selinux]
+      - recipe[system_core::ssh]
+      - recipe[system_core::logrotate]
+    attributes:
+      system_core:
+        aws:
+          profiles:
+            default:
+              output_format: "json"
+              region: "<%= ENV.key('AWS_REGION') ? ENV['AWS_REGION'] : 'us-east-1' %>"
+              access_key: "<%= ENV['AWS_ACCESS_KEY_ID'] %>"
+              secret_key: "<%= ENV['AWS_SECRET_ACCESS_KEY'] %>"
+        domain: "linux.alt.org"

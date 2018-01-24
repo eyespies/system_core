@@ -1,0 +1,29 @@
+AllCops:
+  Exclude:
+    - 'Vagrantfile'
+  DisplayCopNames: true
+
+AlignParameters:
+  Enabled: false
+
+Encoding:
+  Enabled: false
+
+LineLength:
+  Max: 180
+
+StringLiterals:
+  Enabled: false
+
+Layout/SpaceBeforeFirstArg:
+  Exclude:
+    - 'metadata.rb'
+
+Metrics/MethodLength:
+  Max: 35
+
+Metrics/BlockLength:
+  Max: 35
+
+Style/SymbolArray:
+  Enabled: false

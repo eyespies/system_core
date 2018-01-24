@@ -1,0 +1,6 @@
+{
+  "id": "core",
+  "description": "Core DataBag for unit and integration testing",
+  "aws_region": "us-east-1",
+  "domain": "linux.somedomain.org"
+}

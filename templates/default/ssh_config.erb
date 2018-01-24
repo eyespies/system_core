@@ -1,0 +1,6 @@
+<% @hosts.each do |host, opts| -%>
+Host <%= host %>
+<%   opts.each do |k, v| -%>
+  <%= k %> <%= v %>
+<%   end -%>
+<% end -%>

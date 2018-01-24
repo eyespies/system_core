@@ -1,0 +1,6 @@
+{
+  "id": "sudo",
+  "description": "Linux SUDO DataBag for unit and integration testing",
+  "passwordless": "true",
+  "sudo_group": "sudoers"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "aws",
+  "description": "AWS DataBag for unit and integration testing",
+  "profiles": {
+    "default": {
+      "access_key": "AKIAXXXXXXXXXXXXXXXX",
+      "secret_key": "some_super_really_very_secret_special_ke"
+    }
+  }
+}

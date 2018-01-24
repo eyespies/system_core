@@ -1,0 +1,8 @@
+{
+  "id": "postfix",
+  "description": "Postfix Server DataBag for unit and integration testing",
+  "relayhost": "somethinghere",
+  "outgoing": "",
+  "username": "",
+  "password": ""
+}

@@ -1,0 +1,5 @@
+<% @profiles.each do |name, options| -%>
+[<%= name %>]
+<% if options.key?('output_format') -%>output = <%= options['output_format'] %><% end -%>
+<% if options.key?('default_region') -%>region = <%= options['default_region'] %><% end -%>
+<% end -%>

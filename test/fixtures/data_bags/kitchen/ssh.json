@@ -1,0 +1,5 @@
+{
+  "id": "ssh",
+  "description": "OpenSSH DataBag for unit and integration testing",
+  "password_auth": "yes"
+}
