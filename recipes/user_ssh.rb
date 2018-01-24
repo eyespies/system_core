@@ -47,6 +47,15 @@ if node['system_core']['ssh'].attribute?('user_config')
       mode 0o0700
     end
 
+    if node['system_core']['ssh'].attribute?('authorized_keys') && !node['system_core']['ssh']['authorized_keys'].empty?
+      node['system_core']['ssh']['authorized_keys'].each do |keyname, options|
+        ssh_authorize_key keyname do
+          key options['public_key']
+          user options['user']
+        end
+      end
+    end
+
     # If there is a config attribute for the user, then setup a custom SSH config.
     if opts.attribute?('config')
       template "#{user_home}/.ssh/config" do
