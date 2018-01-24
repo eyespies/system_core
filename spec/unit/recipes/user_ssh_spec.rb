@@ -35,8 +35,9 @@ describe 'system_core::user_ssh' do
           runner.converge(described_recipe)
         end
 
-        it 'should create the users home directory' do
+        it 'should create the users home and .ssh directories' do
           expect(chef_run).to create_directory('/root')
+          expect(chef_run).to create_directory('/root/.ssh')
         end
 
         it 'should create the user specific SSH configuration file' do
@@ -95,8 +96,9 @@ describe 'system_core::user_ssh' do
           runner.converge(described_recipe)
         end
 
-        it 'should create the users home directory' do
+        it 'should create the users home and .ssh directories' do
           expect(chef_run).to create_directory('/root')
+          expect(chef_run).to create_directory('/root/.ssh')
         end
 
         it 'should NOT create the SSH public/private key files' do

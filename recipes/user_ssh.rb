@@ -41,6 +41,12 @@ if node['system_core']['ssh'].attribute?('user_config')
       mode 0o0755
     end
 
+    directory "#{user_home}/.ssh" do
+      owner usr
+      group usr
+      mode 0o0700
+    end
+
     # If there is a config attribute for the user, then setup a custom SSH config.
     if opts.attribute?('config')
       template "#{user_home}/.ssh/config" do
