@@ -3,6 +3,53 @@ control 'ssh-daemon' do
   title 'Secure Shell Server Daemon'
   desc 'TBD'
 
+  ciphers = case os.name
+            when 'centos', 'redhat', 'oracle'
+              case
+              when os.release.to_s =~ /^6/
+                %w[aes128-ctr
+                   aes192-ctr
+                   aes256-ctr]
+              when os.release.to_s =~ /^7/
+                %w[chacha20-poly1305@openssh.com
+                   aes128-ctr
+                   aes192-ctr
+                   aes256-ctr
+                   aes128-gcm@openssh.com
+                   aes256-gcm@openssh.com]
+              else
+                nil
+              end
+            end
+
+  macs = case os.name
+         when 'centos', 'redhat', 'oracle'
+           case
+           when os.release.to_s =~ /^6/
+             %w[hmac-sha1
+                umac-64@openssh.com
+                hmac-ripemd160
+                hmac-sha1-96
+                hmac-sha2-256
+                hmac-sha2-512
+                hmac-ripemd160@openssh.com]
+           when os.release.to_s =~ /^7/
+             %w[umac-64-etm@openssh.com
+                umac-128-etm@openssh.com
+                hmac-sha2-256-etm@openssh.com
+                hmac-sha2-512-etm@openssh.com
+                hmac-sha1-etm@openssh.com
+                umac-64@openssh.com
+                umac-128@openssh.com
+                hmac-sha2-256
+                hmac-sha2-512
+                hmac-sha1
+                hmac-sha1-etm@openssh.com]
+           else
+             nil
+          end
+        end
+
   describe file('/etc/ssh/sshd_config') do
     it { should exist }
     it { should be_owned_by 'root' }
@@ -19,6 +66,8 @@ control 'ssh-daemon' do
     its(:content) { should match(/UsePAM\s*yes/i) }
     its(:content) { should match(/X11Forwarding\s*no/i) }
     its(:content) { should match(%r{Subsystem\s*sftp /usr/libexec/openssh/sftp-server}i) }
+    its(:content) { should match(/Ciphers\s*#{ciphers.join(',')}/i) } unless ciphers.nil?
+    its(:content) { should match(/MACs\s*#{macs.join(',')}/i) } unless macs.nil?
 
     # How to test file changes based on environmental conditions, e.g.:
     # if File.exist?('/usr/bin/sss_ssh_authorizedkeys') && File.exist?('/etc/ipa/ca.crt')

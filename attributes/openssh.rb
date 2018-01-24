@@ -47,24 +47,52 @@ accept_env = 'LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY'
 accept_env = "#{accept_env} LC_MESSAGES LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT"
 accept_env += ' LC_IDENTIFICATION LC_ALL LANGUAGE XMODIFIERS'
 
-ciphers = %w[chacha20-poly1305@openssh.com
-             aes128-ctr
-             aes192-ctr
-             aes256-ctr
-             aes128-gcm@openssh.com
-             aes256-gcm@openssh.com]
+ciphers = case node['platform_family']
+          when 'rhel'
+            case
+            when node['platform_version'] =~ /^6/
+              %w[aes128-ctr
+                 aes192-ctr
+                 aes256-ctr]
+            when node['platform_version'] =~ /^7/
+              %w[chacha20-poly1305@openssh.com
+                 aes128-ctr
+                 aes192-ctr
+                 aes256-ctr
+                 aes128-gcm@openssh.com
+                 aes256-gcm@openssh.com]
+            else
+              nil
+            end
+          end
 
-macs = %w[umac-64-etm@openssh.com
-          umac-128-etm@openssh.com
-          hmac-sha2-256-etm@openssh.com
-          hmac-sha2-512-etm@openssh.com
-          hmac-sha1-etm@openssh.com
-          umac-64@openssh.com
-          umac-128@openssh.com
-          hmac-sha2-256
-          hmac-sha2-512
-          hmac-sha1
-          hmac-sha1-etm@openssh.com]
+macs = case node['platform_family']
+          when 'rhel'
+            case
+            when node['platform_version'] =~ /^6/
+              %w[hmac-sha1
+                 umac-64@openssh.com
+                 hmac-ripemd160
+                 hmac-sha1-96
+                 hmac-sha2-256
+                 hmac-sha2-512
+                 hmac-ripemd160@openssh.com]
+            when node['platform_version'] =~ /^7/
+              %w[umac-64-etm@openssh.com
+                 umac-128-etm@openssh.com
+                 hmac-sha2-256-etm@openssh.com
+                 hmac-sha2-512-etm@openssh.com
+                 hmac-sha1-etm@openssh.com
+                 umac-64@openssh.com
+                 umac-128@openssh.com
+                 hmac-sha2-256
+                 hmac-sha2-512
+                 hmac-sha1
+                 hmac-sha1-etm@openssh.com]
+            else
+              nil
+            end
+          end
 
 node.override['openssh']['server']['banner']                            = '/etc/ssh/banner'
 node.override['openssh']['server']['login_grace_time']                  = '1m'
@@ -78,8 +106,14 @@ node.override['openssh']['server']['g_s_s_a_p_i_cleanup_credentials']   = 'yes'
 node.override['openssh']['server']['use_p_a_m']                         = 'yes'
 node.override['openssh']['server']['accept_env']                        = accept_env
 node.override['openssh']['server']['x11_forwarding']                    = 'no'
-node.override['openssh']['server']['ciphers']                           = ciphers.join(',')
-node.override['openssh']['server']['mACs']                              = macs.join(',')
+
+unless ciphers.nil?
+  node.override['openssh']['server']['ciphers']                           = ciphers.join(',')
+end
+
+unless macs.nil?
+  node.override['openssh']['server']['mACs']                              = macs.join(',')
+end
 
 if File.exist?('/usr/bin/sss_ssh_authorizedkeys') && File.exist?('/etc/ipa/ca.crt')
   # Override the default SSH settings - these are required in order to enable use of SSH keys stored in IPA
