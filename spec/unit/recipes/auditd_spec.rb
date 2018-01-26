@@ -13,7 +13,7 @@ describe 'system_core::auditd' do
 
         it 'should configure auditd' do
           resource = chef_run.service('auditd')
-          expect(resource).to do_nothing()
+          expect(resource).to do_nothing
           expect(chef_run).to create_cookbook_file('/etc/audit/auditd.conf')
 
           resource = chef_run.cookbook_file('/etc/audit/auditd.conf')
