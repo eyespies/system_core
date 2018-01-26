@@ -21,16 +21,6 @@ platforms:
       box: bento/oracle-7.3
 
 suites:
-  - name: default
-    data_bags_path: "../../data_bags"
-    run_list:
-      - recipe[system_core::default]
-      - recipe[system_core::repos]
-      - recipe[system_core::awscli]
-      - recipe[system_core::bash]
-      - recipe[system_core::postfix]
-      - recipe[system_core::ntp]
-      - recipe[system_core::selinux]
   - name: base
     data_bags_path: "../../data_bags"
     run_list:
@@ -45,8 +35,6 @@ suites:
       - recipe[system_core::logrotate]
       - recipe[system_core::user_ssh]
     attributes:
-      # TODO: For the ENV vars, create a hidden file called '.secrets' from which the values will be read; this
-      # avoids having to reset the values everytime a new terminal is opened.
       system_core:
         ssh:
           authorized_keys:
@@ -82,6 +70,14 @@ suites:
       - recipe[system_core::logrotate]
       - recipe[system_core::papertrail]
       - recipe[logrotate::default]
+    verifier:
+      attributes:
+        papertrail_host: '@@log.example.com:11111'
+    attributes:
+      system_core:
+        papertrail:
+          enabled: true
+          remote_host: '@@log.example.com:11111'
   - name: ruby
     data_bags_path: "../../data_bags"
     run_list:
