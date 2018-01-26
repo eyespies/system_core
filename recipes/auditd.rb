@@ -15,9 +15,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#service 'auditd' do
+service 'auditd' do
   restart_command '/usr/libexec/initscripts/legacy-actions/auditd/restart' if platform_family?('rhel') && node['init_package'] == 'systemd'
-  supports [:start, :stop, :restart, :reload, :status] # rubocop:disable Style/SymbolArray
+  supports [:start, :stop, :restart, :reload, :status]
   action :nothing
 end
 
