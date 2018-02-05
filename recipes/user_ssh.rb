@@ -31,7 +31,7 @@ if node['system_core']['ssh'].attribute?('user_config')
 
   # TODO: Fix method length
   node['system_core']['ssh']['user_config'].each do |usr, opts| # rubocop:disable Metrics/BlockLength
-    # TODO: What happens if the user doesn't exist?
+    # TODO: This is evaluated at compile time, when users often don't exist, and thus throws an error.
     user_home = Dir.home(usr)
 
     # Make sure the users home directory exists
