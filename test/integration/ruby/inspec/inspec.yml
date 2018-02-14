@@ -1,10 +1,15 @@
-name: linux-core
-title: Core Configuration for Linux Servers
+name: system_core
+title: Tests that the system meets the minimum required standards.
 maintainer: Justin Spies
 copyright: Justin Spies
 copyright_email: justin@thespies.org
-license: Proprietary, All rights reserved
+license: Apache-2.0
 summary: Verifies configuration of core services and components for Linux systems
 version: 1.0.0
 supports:
   - os-family: redhat
+depends:
+  - name: linux-baseline
+    url: https://github.com/dev-sec/linux-baseline
+  - name: system-baseline
+    url: https://github.com/eyespies/system-baseline

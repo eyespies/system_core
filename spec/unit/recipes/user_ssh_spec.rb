@@ -13,6 +13,7 @@ describe 'system_core::user_ssh' do
         before do
           # Don't use allow_any_instance_of because :home is a static / class scoped method and not an instance method.
           allow(Dir).to receive(:home).with('root').and_return('/root')
+          allow_any_instance_of(Chef::Recipe).to receive(:ssh_authorize_key)
         end
 
         let(:chef_run) do
@@ -22,6 +23,9 @@ describe 'system_core::user_ssh' do
           # Must use node.override
           runner.node.override['system_core']['aws']['profiles']['default']['access_key'] = 'AKIASOMETHINGFAKE'
           runner.node.override['system_core']['aws']['profiles']['default']['secret_key'] = 'thisismyreallylongawssectaccesskey'
+
+          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Metrics/LineLength
+          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['user'] = 'root'
 
           runner.node.default['system_core']['ssh']['user_config']['root']['config']['hosts']['*']['SendEnv'] = 'LANG LC_*'
           runner.node.default['system_core']['ssh']['user_config']['root']['config']['hosts']['*']['ForwardAgent'] = 'yes'
@@ -35,8 +39,14 @@ describe 'system_core::user_ssh' do
           runner.converge(described_recipe)
         end
 
-        it 'should create the users home directory' do
+        it 'should create the users home and .ssh directories' do
           expect(chef_run).to create_directory('/root')
+          expect(chef_run).to create_directory('/root/.ssh')
+        end
+
+        it 'should configure the SSH authorized keys' do
+          expect_any_instance_of(Chef::Recipe).to receive(:ssh_authorize_key)
+          chef_run
         end
 
         it 'should create the user specific SSH configuration file' do
@@ -63,6 +73,10 @@ describe 'system_core::user_ssh' do
           runner.node.override['system_core']['aws']['profiles']['default']['access_key'] = 'AKIASOMETHINGFAKE'
           runner.node.override['system_core']['aws']['profiles']['default']['secret_key'] = 'thisismyreallylongawssectaccesskey'
 
+          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Metrics/LineLength
+
+          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['user'] = 'root'
+
           runner.node.default['system_core']['ssh']['user_config']['root']['keys']['id_rsa-chef-solo']['owner'] = 'root'
           runner.node.default['system_core']['ssh']['user_config']['root']['keys']['id_rsa-chef-solo']['ssh_key_bucket'] = 'private.thespies.org'
           runner.node.default['system_core']['ssh']['user_config']['root']['keys']['id_rsa-chef-solo']['ssh_key_path'] = 'ssh-keys/chef-solo'
@@ -71,6 +85,11 @@ describe 'system_core::user_ssh' do
 
         it 'should create the users home directory' do
           expect(chef_run).to create_directory('/root')
+        end
+
+        it 'should configure the SSH authorized keys' do
+          expect_any_instance_of(Chef::Recipe).to receive(:ssh_authorize_key)
+          chef_run
         end
 
         it 'should create the SSH public/private key files' do
@@ -83,11 +102,15 @@ describe 'system_core::user_ssh' do
         before do
           # Don't use allow_any_instance_of because :home is a static / class scoped method and not an instance method.
           allow(Dir).to receive(:home).with('root').and_return('/root')
+          allow_any_instance_of(Chef::Recipe).to receive(:ssh_authorize_key)
         end
 
         let(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.default['environment'] = 'dev'
+
+          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Metrics/LineLength
+          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['user'] = 'root'
 
           runner.node.default['system_core']['ssh']['user_config']['root']['keys']['id_rsa-chef-solo']['owner'] = 'root'
           runner.node.default['system_core']['ssh']['user_config']['root']['keys']['id_rsa-chef-solo']['ssh_key_bucket'] = 'private.thespies.org'
@@ -95,10 +118,15 @@ describe 'system_core::user_ssh' do
           runner.converge(described_recipe)
         end
 
-        it 'should create the users home directory' do
+        it 'should create the users home and .ssh directories' do
           expect(chef_run).to create_directory('/root')
+          expect(chef_run).to create_directory('/root/.ssh')
         end
 
+        it 'should configure the SSH authorized keys' do
+          expect_any_instance_of(Chef::Recipe).to receive(:ssh_authorize_key)
+          chef_run
+        end
         it 'should NOT create the SSH public/private key files' do
           expect(chef_run).to_not create_s3_file('/root/.ssh/id_rsa-chef-solo')
           expect(chef_run).to_not create_s3_file('/root/.ssh/id_rsa-chef-solo.pub')

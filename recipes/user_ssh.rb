@@ -31,7 +31,7 @@ if node['system_core']['ssh'].attribute?('user_config')
 
   # TODO: Fix method length
   node['system_core']['ssh']['user_config'].each do |usr, opts| # rubocop:disable Metrics/BlockLength
-    # TODO: What happens if the user doesn't exist?
+    # TODO: This is evaluated at compile time, when users often don't exist, and thus throws an error.
     user_home = Dir.home(usr)
 
     # Make sure the users home directory exists
@@ -39,6 +39,21 @@ if node['system_core']['ssh'].attribute?('user_config')
       owner usr
       group usr
       mode 0o0755
+    end
+
+    directory "#{user_home}/.ssh" do
+      owner usr
+      group usr
+      mode 0o0700
+    end
+
+    if node['system_core']['ssh'].attribute?('authorized_keys') && !node['system_core']['ssh']['authorized_keys'].empty?
+      node['system_core']['ssh']['authorized_keys'].each do |keyname, options|
+        ssh_authorize_key keyname do
+          key options['public_key']
+          user options['user']
+        end
+      end
     end
 
     # If there is a config attribute for the user, then setup a custom SSH config.

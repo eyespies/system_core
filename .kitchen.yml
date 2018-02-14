@@ -2,7 +2,7 @@
 driver:
   name: vagrant
   customize:
-    memory: 512
+    memory: 1024
     cpus: 1
 
 provisioner:
@@ -21,16 +21,6 @@ platforms:
       box: bento/oracle-7.3
 
 suites:
-  - name: default
-    data_bags_path: "../../data_bags"
-    run_list:
-      - recipe[system_core::default]
-      - recipe[system_core::repos]
-      - recipe[system_core::awscli]
-      - recipe[system_core::bash]
-      - recipe[system_core::postfix]
-      - recipe[system_core::ntp]
-      - recipe[system_core::selinux]
   - name: base
     data_bags_path: "../../data_bags"
     run_list:
@@ -45,10 +35,12 @@ suites:
       - recipe[system_core::logrotate]
       - recipe[system_core::user_ssh]
     attributes:
-      # TODO: For the ENV vars, create a hidden file called '.secrets' from which the values will be read; this
-      # avoids having to reset the values everytime a new terminal is opened.
       system_core:
         ssh:
+          authorized_keys:
+            root:
+              public_key: "AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd"
+              user: 'root'
           user_config:
             root:
               hosts:
@@ -78,6 +70,14 @@ suites:
       - recipe[system_core::logrotate]
       - recipe[system_core::papertrail]
       - recipe[logrotate::default]
+    verifier:
+      attributes:
+        papertrail_host: '@@log.example.com:11111'
+    attributes:
+      system_core:
+        papertrail:
+          enabled: true
+          remote_host: '@@log.example.com:11111'
   - name: ruby
     data_bags_path: "../../data_bags"
     run_list:

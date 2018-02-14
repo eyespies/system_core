@@ -6,7 +6,7 @@ issues_url       'https://github.com/eyespies/system_core/issues'
 license          'Apache-2.0'
 description      'Core operating system configuration for Enterprise Linux'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '1.0.0'
+version          '1.2.0'
 chef_version     '>= 12'
 
 # This is the 3ofcoins version and is the one from which all others are forked. Tried using the 'hostnames' version
@@ -21,7 +21,7 @@ depends 'openssh', '~> 2.4.0'
 depends 'postfix', '~> 5.1.0'
 depends 'ruby_rbenv', '~> 2.0.0'
 depends 'rsyslog', '~> 6.0.0'
-depends 's3_file', '~> 2.7.0'
+depends 's3_file', '~> 2.8.0'
 depends 'selinux', '~> 2.0.0'
 depends 'ssh_authorized_keys', '~> 0.4.0'
 depends 'ssh_known_hosts', '~> 5.2.0'

@@ -17,10 +17,11 @@ describe 'system_core::rsyslog' do
           end
         end
 
-        it 'should include the rsyslog recipe' do
+        it 'should include the rsyslog recipe and define the rsyslog service' do
           expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('rsyslog')
           # Nothing here on the service because it is defined but no actions are specified
-          chef_run
+          resource = chef_run.service('rsyslog')
+          expect(resource).to do_nothing
         end
       end
     end
