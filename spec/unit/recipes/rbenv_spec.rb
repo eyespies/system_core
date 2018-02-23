@@ -7,7 +7,7 @@ describe 'system_core::rbenv' do
     versions = details['versions']
     versions.each do |version|
       context "On #{platform} #{version}" do
-        let(:chef_run) do
+        cached(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.override['environment'] = 'dev'
           runner.converge(described_recipe)

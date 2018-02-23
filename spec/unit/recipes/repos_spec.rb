@@ -14,7 +14,7 @@ describe 'system_core::repos' do
           stub_command("yum list installed|grep mysql55w-libs").and_return(false)
         end
 
-        let(:chef_run) do
+        cached(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.default['environment'] = 'dev'
           runner.converge(described_recipe)
@@ -65,7 +65,7 @@ describe 'system_core::repos' do
           stub_command("yum list installed|grep mysql55w-libs").and_return(true)
         end
 
-        let(:chef_run) do
+        cached(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.default['environment'] = 'dev'
           runner.converge(described_recipe)

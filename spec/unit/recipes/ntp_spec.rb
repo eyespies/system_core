@@ -13,7 +13,7 @@ describe 'system_core::ntp' do
           stub_command("[ `readlink /etc/localtime` == \"/usr/share/zoneinfo/EST5EDT\" ]").and_return(false)
         end
 
-        let(:chef_run) do
+        cached(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.override['environment'] = 'dev'
           runner.converge(described_recipe)
@@ -41,7 +41,7 @@ describe 'system_core::ntp' do
           stub_command("[ `readlink /etc/localtime` == \"/usr/share/zoneinfo/EST5EDT\" ]").and_return(true)
         end
 
-        let(:chef_run) do
+        cached(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.override['environment'] = 'dev'
           runner.converge(described_recipe)

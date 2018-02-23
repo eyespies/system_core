@@ -11,7 +11,7 @@ describe 'system_core::awscli' do
               stub_command('which aws').and_return(has_aws)
             end
 
-            let(:chef_run) do
+            cached(:chef_run) do
               runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
               runner.node.override['environment'] = 'dev'
               if has_profile
