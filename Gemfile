@@ -1,41 +1,52 @@
 source 'https://rubygems.org'
 
-gem 'inspec', path: '../../.'
+gem 'berkshelf', '~> 6.1'
+gem 'chef', '~> 13.0'
+gem 'inspec', '~> 1.51.0'
 
 group :test do
-  gem 'bundler', '~> 1.5'
-  gem 'foodcritic', '~> 5.0'
-  gem 'minitest', '~> 5.5'
-  gem 'overcommit'
-  gem 'rake', '~> 10'
-  gem 'rubocop', '~> 0.49.0'
-  gem 'simplecov', '~> 0.10'
-  gem 'tomlrb'
+  gem 'bundler', '~> 1.16.0'
+  gem 'minitest', '~> 5.11.0'
+  gem 'rake', '~> 12.3.0'
+  gem 'simplecov', '~> 0.15.0'
+end
+
+group :rake do
+  gem 'rake', '~> 12.3.0' # rubocop:disable Bundler/DuplicatedGem
+  gem 'tomlrb', '~> 1.2.0'
+end
+
+group :lint do
+  gem 'foodcritic', '~> 12.3.0'
+  gem 'overcommit', '~> 0.43.0'
+  gem 'rubocop', '~> 0.52.0'
 end
 
 group :unit do
-  gem 'berkshelf',  '~> 4.0'
-  gem 'chefspec',   '~> 4.4'
+  gem 'chefspec', '~> 7.1.0'
 end
 
 group :kitchen_common do
-  gem 'serverspec'
-  gem 'test-kitchen', '~> 1.4'
+  gem 'test-kitchen', '~> 1.20.0'
 end
 
 group :kitchen_vagrant do
-  gem 'kitchen-docker'
-  gem 'kitchen-dokken'
-  gem 'kitchen-vagrant', '~> 0.19'
+  gem 'kitchen-docker', '~> 2.6.0'
+  gem 'kitchen-dokken', '~> 2.6.0'
+  gem 'kitchen-vagrant', '~> 1.3.0'
 end
 
 group :development do
-  gem 'growl'
-  gem 'guard', '~> 2.4'
-  gem 'guard-foodcritic'
-  gem 'guard-kitchen'
-  gem 'guard-rspec'
-  gem 'guard-rubocop'
-  gem 'rb-fsevent'
-  gem 'ruby_gntp'
+  gem 'growl', '~> 1.0.0'
+  gem 'guard', '~> 2.14.0'
+  gem 'guard-foodcritic', '~> 3.0.0'
+  gem 'guard-kitchen', '~> 0.0.0'
+  gem 'guard-rspec', '~> 4.7.0'
+  gem 'guard-rubocop', '~> 1.3.0'
+  gem 'rb-fsevent', '~> 0.10.0'
+  gem 'ruby_gntp', '~> 0.3.0'
+end
+
+group :tools do
+  gem 'github_changelog_generator', '~> 1.14'
 end
