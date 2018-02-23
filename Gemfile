@@ -5,7 +5,7 @@ gem 'chef', '~> 13.0'
 gem 'inspec', '~> 1.51.0'
 
 group :test do
-  gem 'bundler', '~> 1.15.0'
+  gem 'bundler', '>= 1.15.0'
   gem 'minitest', '~> 5.11.0'
   gem 'rake', '~> 12.3.0'
   gem 'simplecov', '~> 0.15.0'
