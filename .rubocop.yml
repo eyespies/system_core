@@ -1,6 +1,7 @@
 AllCops:
   Exclude:
     - 'Vagrantfile'
+    - vendor/**/*
   DisplayCopNames: true
 
 AlignParameters:
