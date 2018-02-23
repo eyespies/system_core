@@ -25,3 +25,14 @@ node.default['system_core']['papertrail']['enabled'] = false
 # If Papertrail is enabled, this attribute needs set with the full name, including the leading '@' (for UDP) or
 # '@@' (for TCP) prefixes.
 # node.default['system_core']['papertrail']['remote_host'] = '@@log1.papertrailapp.com:12345'
+
+node.default['system_core']['papertrail']['remote_syslog2']['source_url'] = 'https://github.com/papertrail/remote_syslog2/releases/download/v0.20/remote_syslog2-0.20-1.x86_64.rpm'
+node.default['system_core']['papertrail']['remote_syslog2']['config']['file_name'] = '/etc/log_files.yaml'
+node.default['system_core']['papertrail']['remote_syslog2']['config']['template_file'] = '/etc/log_files.yaml'
+node.default['system_core']['papertrail']['remote_syslog2']['config']['template_cookbook'] = 'system_core'
+node.default['system_core']['papertrail']['remote_syslog2']['config']['template_file'] = 'log_files.yaml.erb'
+
+node.default['system_core']['papertrail']['remote_syslog2']['protocol'] = 'tls'
+node.default['system_core']['papertrail']['remote_syslog2']['hostname'] = nil
+node.default['system_core']['papertrail']['remote_syslog2']['files'] = nil
+node.default['system_core']['papertrail']['remote_syslog2']['exclude_patterns'] = nil

@@ -69,6 +69,7 @@ suites:
       - recipe[system_core::rsyslog]
       - recipe[system_core::logrotate]
       - recipe[system_core::papertrail]
+      - recipe[system_core::papertrail_remote]
       - recipe[logrotate::default]
     verifier:
       attributes:
@@ -78,7 +79,11 @@ suites:
         papertrail:
           enabled: true
           remote_host: '@@log.example.com:11111'
-  - name: ruby
+          files:
+            - /some/file/without-tags
+            - /some/file/with-tag
+              tag: test
+hi  - name: ruby
     data_bags_path: "../../data_bags"
     run_list:
       - recipe[system_core::default]
