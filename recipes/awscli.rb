@@ -40,6 +40,7 @@ end
 
 execute 'install-aws-cli' do
   command '/tmp/install-aws-cli.sh'
+  cwd '/tmp'
   not_if 'which aws'
 end
 

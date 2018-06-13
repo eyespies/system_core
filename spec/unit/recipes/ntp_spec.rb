@@ -28,10 +28,10 @@ describe 'system_core::ntp' do
           expect(chef_run).to run_execute 'configure_ntp'
         end
 
-        it 'should enable and start the NTP service' do
-          expect(chef_run).to enable_service 'ntpd'
-          expect(chef_run).to start_service 'ntpd'
-        end
+        # it 'should enable and start the NTP service' do
+        #   expect(chef_run).to enable_service 'ntpd'
+        #   expect(chef_run).to start_service 'ntpd'
+        # end
       end
 
       context "On #{platform} #{version} localtime is set and does not need updated" do
@@ -58,10 +58,10 @@ describe 'system_core::ntp' do
           expect(chef_run).to_not run_execute 'configure_ntp'
         end
 
-        it 'should enable and start the NTP service' do
-          expect(chef_run).to enable_service 'ntpd'
-          expect(chef_run).to start_service 'ntpd'
-        end
+        # it 'should enable and start the NTP service' do
+        #   expect(chef_run).to enable_service 'ntpd'
+        #   expect(chef_run).to start_service 'ntpd'
+        # end
       end
     end
   end

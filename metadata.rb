@@ -13,6 +13,7 @@ chef_version     '>= 12'
 # from nathantsoi, however it does not properly support Oracle Linux. It also generates Chef warnings and although a
 # PR was submitted in January 2017 to eliminate the warnings, as of August 2017 the maintainer has not merged the PR.
 # So it seems the nathantsoi version is no longer maintained.
+depends 'apt', '~> 6.0'
 depends 'hostname', '~> 0.4.0'
 depends 'iptables', '~> 4.2.0'
 depends 'logrotate', '~> 2.2.0'
@@ -29,6 +30,7 @@ depends 'sudo', '~> 3.5.0'
 depends 'yum', '~> 5.0.0'
 depends 'yum-epel', '~> 2.1.0'
 
+supports 'ubuntu', '>= 16.04'
 supports 'centos', '>= 6.0'
 supports 'redhat', '>= 6.0'
 supports 'oracle', '>= 6.0'

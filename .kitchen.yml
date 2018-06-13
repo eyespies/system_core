@@ -7,24 +7,30 @@ driver:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: <%= ENV.has_key?('CHEF_VERSION') ? ENV['CHEF_VERSION'] : true %>
+  require_chef_omnibus: "<%= ENV.has_key?('CHEF_VERSION') ? ENV['CHEF_VERSION'] : true %>"
 
 verifier:
   name: inspec
 
 platforms:
+  - name: ubuntu-16.04
+  - name: ubuntu-18.04
   - name: centos-6.9
-  - name: centos-7.3
+  - name: centos-7.5
   - name: oracle-6.9
-  - name: oracle-7.3
+  - name: oracle-7.5
     driver_config:
-      box: bento/oracle-7.3
+      box: bento/oracle-7.5
 
 suites:
   - name: base
     data_bags_path: "../../data_bags"
     run_list:
       - recipe[system_core::default]
+      # This seems to be automatically installed by RHEL / CentOS / Oracle,
+      # but not by Debian, which causes the Debian tests to fail because they
+      # are looking for auditd
+      - recipe[system_core::auditd]
       - recipe[system_core::repos]
       - recipe[system_core::awscli]
       - recipe[system_core::bash]

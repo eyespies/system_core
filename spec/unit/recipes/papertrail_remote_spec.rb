@@ -2,6 +2,9 @@ require 'spec_helper'
 
 describe 'system_core::papertrail_remote' do
   packages = {
+    'ubuntu' => {
+      'remote_syslog2' => '/tmp/remote_syslog2.rpm'
+    },
     'centos' => {
       'remote_syslog2' => '/tmp/remote_syslog2.rpm'
     },
