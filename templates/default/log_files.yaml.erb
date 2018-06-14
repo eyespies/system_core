@@ -2,11 +2,13 @@
 hostname: <%= @config['hostname'] %>
 <% end -%>
 files:
-<% @config['files'].each do |file, tag|
+<% if @config.key('files')
+     @config['files'].each do |file, tag| -%>
   - path: <%= file %>
-<%   unless tag.nil? -%>
+<%     unless tag.nil? -%>
     tag: <%= tag %>
-<%   end
+<%     end
+     end
    end
 -%>
 destination:
@@ -15,7 +17,7 @@ destination:
   protocol: <%= @papertrail_protocol %>
 <% if @config.key?('exclude_patterns') -%>
 exclude_patterns:
-<%   @config['exclude_patterns'].each do |pattern|
+<%   @config['exclude_patterns'].each do |pattern| -%>
   - <%= pattern %>
 <%   end
    end
