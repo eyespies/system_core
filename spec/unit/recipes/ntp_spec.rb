@@ -13,7 +13,7 @@ describe 'system_core::ntp' do
           stub_command("[ `readlink /etc/localtime` == \"/usr/share/zoneinfo/EST5EDT\" ]").and_return(false)
         end
 
-        let(:chef_run) do
+        cached(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.override['environment'] = 'dev'
           runner.converge(described_recipe)
@@ -28,10 +28,10 @@ describe 'system_core::ntp' do
           expect(chef_run).to run_execute 'configure_ntp'
         end
 
-        it 'should enable and start the NTP service' do
-          expect(chef_run).to enable_service 'ntpd'
-          expect(chef_run).to start_service 'ntpd'
-        end
+        # it 'should enable and start the NTP service' do
+        #   expect(chef_run).to enable_service 'ntpd'
+        #   expect(chef_run).to start_service 'ntpd'
+        # end
       end
 
       context "On #{platform} #{version} localtime is set and does not need updated" do
@@ -41,7 +41,7 @@ describe 'system_core::ntp' do
           stub_command("[ `readlink /etc/localtime` == \"/usr/share/zoneinfo/EST5EDT\" ]").and_return(true)
         end
 
-        let(:chef_run) do
+        cached(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.override['environment'] = 'dev'
           runner.converge(described_recipe)
@@ -58,10 +58,10 @@ describe 'system_core::ntp' do
           expect(chef_run).to_not run_execute 'configure_ntp'
         end
 
-        it 'should enable and start the NTP service' do
-          expect(chef_run).to enable_service 'ntpd'
-          expect(chef_run).to start_service 'ntpd'
-        end
+        # it 'should enable and start the NTP service' do
+        #   expect(chef_run).to enable_service 'ntpd'
+        #   expect(chef_run).to start_service 'ntpd'
+        # end
       end
     end
   end

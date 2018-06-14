@@ -11,10 +11,11 @@ describe 'system_core::repos' do
           # Mock accepting the include_recipe commands
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum')
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum-epel')
+          allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('apt::default')
           stub_command("yum list installed|grep mysql55w-libs").and_return(false)
         end
 
-        let(:chef_run) do
+        cached(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.default['environment'] = 'dev'
           runner.converge(described_recipe)
@@ -27,6 +28,7 @@ describe 'system_core::repos' do
         it 'should call the necessary YUM recipes' do
           expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum')
           expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum-epel')
+          expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('apt::default')
 
           chef_run
         end
@@ -62,10 +64,11 @@ describe 'system_core::repos' do
           # Mock accepting the include_recipe commands
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum')
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum-epel')
+          allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('apt::default')
           stub_command("yum list installed|grep mysql55w-libs").and_return(true)
         end
 
-        let(:chef_run) do
+        cached(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.default['environment'] = 'dev'
           runner.converge(described_recipe)
@@ -78,6 +81,7 @@ describe 'system_core::repos' do
         it 'should call the necessary YUM recipes' do
           expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum')
           expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum-epel')
+          expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('apt::default')
 
           chef_run
         end

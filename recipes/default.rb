@@ -19,14 +19,21 @@
 
 # If the node name already has the domain component included, then use the node name itself; otherwise
 # use the domain.
-node.normal['set_fqdn'] = if Chef::Config[:node_name] =~ /#{node['system_core']['domain']}$/i
+
+# NOTE: This appends the domain name if the specified domain name is not part of the hostname, even if the hostname
+# already includes a domain name. e.g. if node['system_core']['domain'] is 'example.com' and the node_name is
+# 'host.mydomain.org', set_fqdn will be set to 'host.mydomain.org.example.com'
+# If the node_name contains a period do not append the node['system_core']['domain'] value.
+node.normal['set_fqdn'] = if Chef::Config[:node_name] =~ /#{node['system_core']['domain']}$/i ||
+                             Chef::Config[:node_name] =~ /.*\..*/
                             Chef::Config[:node_name]
                           else
                             "*.#{node['system_core']['domain']}"
                           end
 
 # The default is 127.0.1.1, which is used under Debian, not RHEL based systems.
-node.normal['hostname_cookbook']['hostsfile_ip'] = '127.0.0.1'
+node.normal['hostname_cookbook']['hostsfile_ip'] = '127.0.0.1' if node['platform_family'] == 'rhel'
+
 # Without this line, the 'hostname' cookbook sets:
 #  -127.0.0.1	full-oracle-73.linux.example.com full-oracle-73
 #  +127.0.0.1	full-oracle-73.linux.example.com full-oracle-73 localhost

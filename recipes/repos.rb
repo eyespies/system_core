@@ -20,6 +20,7 @@
 # Used to install various outside packages
 include_recipe 'yum'
 include_recipe 'yum-epel'
+include_recipe 'apt::default'
 
 # Avoid caching something we don't need cached.
 file '/etc/yum.repos.d/cobbler-config.repo' do

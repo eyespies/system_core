@@ -22,11 +22,20 @@
 
 # ~ system packages ~ #
 # TODO: This should be determined by the platform_family and platform_version
-node.default['system_core']['system']['packages'] = %w[rsyslog gnutls rsyslog-gnutls perl-YAML-LibYAML acpid
-                                                       python-cheetah python-configobj vim-enhanced screen
-                                                       python-pip git htop bash-completion gcc ruby-devel
-                                                       zlib-devel ipa-client xfsprogs xfsprogs-devel
-                                                       tmux xfsdump mutt cloud-init sysstat]
+node.default['system_core']['system']['packages'] = case node['platform_family']
+                                                    when 'rhel'
+                                                      %w[rsyslog gnutls rsyslog-gnutls perl-YAML-LibYAML acpid
+                                                         python-cheetah python-configobj vim-enhanced screen
+                                                         python-pip git htop bash-completion gcc ruby-devel
+                                                         zlib-devel ipa-client xfsprogs xfsprogs-devel
+                                                         tmux xfsdump mutt cloud-init sysstat]
+                                                    when 'debian'
+                                                      %w[rsyslog gnutls-bin libgnutls30 rsyslog-gnutls libyaml-perl acpid
+                                                         python-cheetah python-configobj vim screen
+                                                         python-pip git htop bash-completion gcc ruby-dev
+                                                         zlib1g-dev freeipa-client xfsprogs xfslibs-dev
+                                                         tmux xfsdump mutt cloud-init sysstat]
+                                                    end
 
 # ~ chef-client syslog ~ #
 node.override['chef_client']['log']['syslog_facility'] = '::Syslog::LOG_DAEMON'

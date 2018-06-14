@@ -101,13 +101,8 @@ node.override['openssh']['server']['use_p_a_m']                         = 'yes'
 node.override['openssh']['server']['accept_env']                        = accept_env
 node.override['openssh']['server']['x11_forwarding']                    = 'no'
 
-unless ciphers.nil?
-  node.override['openssh']['server']['ciphers']                           = ciphers.join(',')
-end
-
-unless macs.nil?
-  node.override['openssh']['server']['mACs']                              = macs.join(',')
-end
+node.override['openssh']['server']['ciphers'] = ciphers.join(',') unless ciphers.nil?
+node.override['openssh']['server']['mACs']    = macs.join(',') unless macs.nil?
 
 if File.exist?('/usr/bin/sss_ssh_authorizedkeys') && File.exist?('/etc/ipa/ca.crt')
   # Override the default SSH settings - these are required in order to enable use of SSH keys stored in IPA

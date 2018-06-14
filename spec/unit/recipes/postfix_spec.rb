@@ -11,7 +11,7 @@ describe 'system_core::postfix' do
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('postfix')
         end
 
-        let(:chef_run) do
+        cached(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.override['environment'] = 'dev'
           runner.converge(described_recipe)
