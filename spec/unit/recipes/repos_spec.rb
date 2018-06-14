@@ -26,10 +26,15 @@ describe 'system_core::repos' do
         end
 
         it 'should call the necessary YUM recipes' do
-          expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum')
-          expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum-epel')
-          expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('apt::default')
-
+          if platform == 'ubuntu'
+            expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('apt::default')
+            expect_any_instance_of(Chef::Recipe).to_not receive(:include_recipe).with('yum')
+            expect_any_instance_of(Chef::Recipe).to_not receive(:include_recipe).with('yum-epel')
+          else
+            expect_any_instance_of(Chef::Recipe).to_not receive(:include_recipe).with('apt::default')
+            expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum')
+            expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum-epel')
+          end
           chef_run
         end
 
@@ -79,9 +84,15 @@ describe 'system_core::repos' do
         end
 
         it 'should call the necessary YUM recipes' do
-          expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum')
-          expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum-epel')
-          expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('apt::default')
+          if platform == 'ubuntu'
+            expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('apt::default')
+            expect_any_instance_of(Chef::Recipe).to_not receive(:include_recipe).with('yum')
+            expect_any_instance_of(Chef::Recipe).to_not receive(:include_recipe).with('yum-epel')
+          else
+            expect_any_instance_of(Chef::Recipe).to_not receive(:include_recipe).with('apt::default')
+            expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum')
+            expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum-epel')
+          end
 
           chef_run
         end
