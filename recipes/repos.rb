@@ -18,9 +18,9 @@
 #
 
 # Used to install various outside packages
-include_recipe 'yum'
-include_recipe 'yum-epel'
-include_recipe 'apt::default'
+include_recipe 'yum' if node['platform_family'] == 'rhel'
+include_recipe 'yum-epel' if node['platform_family'] == 'rhel'
+include_recipe 'apt::default' if node['platform_family'] == 'debian'
 
 # Avoid caching something we don't need cached.
 file '/etc/yum.repos.d/cobbler-config.repo' do

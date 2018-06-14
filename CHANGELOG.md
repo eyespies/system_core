@@ -1,5 +1,8 @@
 # system_core Cookbook Change Log
 
+## 2.1.0
+- Allow specifying the timezone to use
+
 ## 2.0.0
 - Add support for Ubuntu 16 OS
 - Add papertrail_remote recipe and corresponding unit/integration tests

@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: system_core
-# Recipe:: ntp
+# Cookbook :: system_core
+# Attributes :: ntp
 #
 # Copyright (C) 2016 - 2017 Justin Spies
 #
@@ -17,10 +17,5 @@
 # limitations under the License.
 #
 
-include_recipe 'ntp::default'
-
-# TODO: Make the new timezone an attribute
-execute 'configure_ntp' do
-  command "rm /etc/localtime && ln -s /usr/share/zoneinfo/#{node['system_core']['ntp']['timezone']} /etc/localtime"
-  not_if "[ `readlink /etc/localtime` == \"/usr/share/zoneinfo/#{node['system_core']['ntp']['timezone']}\" ]"
-end
+# ~ Local Time Settings ~ #
+node.default['system_core']['ntp']['timezone'] = 'EST5EDT'
