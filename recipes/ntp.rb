@@ -24,9 +24,3 @@ execute 'configure_ntp' do
   command 'rm /etc/localtime && ln -s /usr/share/zoneinfo/EST5EDT /etc/localtime'
   not_if '[ `readlink /etc/localtime` == "/usr/share/zoneinfo/EST5EDT" ]'
 end
-
-# TODO: Make the service name an attribute
-service 'ntpd' do
-  service_name 'ntpd'
-  action [:enable, :start]
-end

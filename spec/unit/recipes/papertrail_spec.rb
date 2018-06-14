@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe 'system_core::papertrail' do
   packages = {
+    'ubuntu' => {
+      'gnutls-package' => 'rsyslog-gnutls',
+      'rsyslog-service' => 'rsyslog'
+    },
     'centos' => {
       'gnutls-package' => 'rsyslog-gnutls',
       'rsyslog-service' => 'rsyslog'
@@ -23,7 +27,7 @@ describe 'system_core::papertrail' do
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('system_core::rsyslog')
         end
 
-        let(:chef_run) do
+        cached(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.override['environment'] = 'dev'
           runner.node.override['system_core']['papertrail']['enabled'] = true
@@ -76,7 +80,7 @@ describe 'system_core::papertrail' do
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('system_core::rsyslog')
         end
 
-        let(:chef_run) do
+        cached(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.override['environment'] = 'dev'
           runner.node.override['system_core']['papertrail']['enabled'] = false

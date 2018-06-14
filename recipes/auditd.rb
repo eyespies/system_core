@@ -15,10 +15,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-service 'auditd' do
-  restart_command '/usr/libexec/initscripts/legacy-actions/auditd/restart' if platform_family?('rhel') && node['init_package'] == 'systemd'
-  supports [:start, :stop, :restart, :reload, :status]
-  action :nothing
+auditd_packages = case node['platform_family']
+                  when 'rhel'
+                    %w[audit audit-libs]
+                  when 'debian'
+                    %w[auditd audispd-plugins]
+                  end
+
+package 'auditd' do
+  package_name auditd_packages
 end
 
 cookbook_file '/etc/audit/auditd.conf' do
@@ -27,4 +32,10 @@ cookbook_file '/etc/audit/auditd.conf' do
   group 'root'
   mode '0640'
   notifies :restart, 'service[auditd]', :delayed
+end
+
+service 'auditd' do
+  restart_command '/usr/libexec/initscripts/legacy-actions/auditd/restart' if platform_family?('rhel') && node['init_package'] == 'systemd'
+  supports [:start, :stop, :restart, :reload, :status]
+  action :nothing
 end
