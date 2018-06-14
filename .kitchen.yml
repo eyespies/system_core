@@ -86,8 +86,11 @@ suites:
           remote_host: '@@log.example.com:11111'
           remote_syslog2:
             files:
-              - /some/file/without-tags:
-              - /some/file/with-tag: 'test'
+              /some/file/without-tags:
+              /some/file/with-tag: 'test'
+              /some/second/file/with-tag: 'test'
+              /some/third/file/with-tag: 'test'
+              /some/second/file/without-tags:
   - name: ruby
     data_bags_path: "../../data_bags"
     run_list:
