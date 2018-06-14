@@ -19,7 +19,14 @@
 
 # ~ awscli ~ #
 node.default['system_core']['awscli']['version'] = '1.4.4'
-node.default['system_core']['awscli']['packages'] = %w[jq wget curl unzip]
+node.default['system_core']['awscli']['packages'] = case node['platform_family']
+                                                    when 'rhel'
+                                                      %w[jq wget curl unzip]
+                                                    when 'debian'
+                                                      # Require Markdown on Ubuntu, otherwise we get
+                                                      # cheetah 2.4.4 requires Markdown>=2.0.1, which is not installed.
+                                                      %w[jq wget curl unzip python-pip python-markdown python3-pip python3-markdown]
+                                                    end
 
 # Defines the attribute with no value so that we can use a shorter 'node['system_core']['aws'].attribute?('profiles')' test
 node.default['system_core']['aws']['profiles'] = nil

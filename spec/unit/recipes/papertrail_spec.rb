@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe 'system_core::papertrail' do
   packages = {
+    'ubuntu' => {
+      'gnutls-package' => 'rsyslog-gnutls',
+      'rsyslog-service' => 'rsyslog'
+    },
     'centos' => {
       'gnutls-package' => 'rsyslog-gnutls',
       'rsyslog-service' => 'rsyslog'

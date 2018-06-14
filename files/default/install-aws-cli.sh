@@ -8,10 +8,15 @@
 # https://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning.
 # InsecurePlatformWarning
 
-if [ ! -e get-pip.py ] ; then
+if [ ! -e ./get-pip.py ] ; then
   # Only download if it hasn't already been downloaded
   curl "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
-  python get-pip.py
+  python ./get-pip.py
 fi
 
+# Fix for Ubuntu which puts pip into /usr/local/bin but which doesn't have /usr/local/bin
+# in the path by default (at least under Test Kitchen)
+if ! env | grep ^PATH | grep '/usr/local/bin' > /dev/null ; then
+  export PATH=$PATH:/usr/local/bin
+fi
 pip install awscli

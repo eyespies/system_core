@@ -17,14 +17,34 @@
 # limitations under the License.
 #
 if node['system_core']['papertrail']['enabled']
-  remote_file "#{Chef::Config['file_cache_path']}/remote_syslog2.rpm" do
-    source node['system_core']['papertrail']['remote_syslog2']['source_url']
+  download_prefix = node['system_core']['papertrail']['remote_syslog2']['source_url_prefix']
+  download_version = node['system_core']['papertrail']['remote_syslog2']['version']
+  filename = case node['platform_family']
+             when 'rhel'
+               "remote_syslog2-#{download_version}-1.x86_64.rpm"
+             when 'debian'
+               "remote-syslog2_#{download_version}_amd64.deb"
+             else
+               Chef::Log.warn('This OS is not yet supported by the system_core::papertrail_remote cookbook')
+               return
+             end
+  download_url = "#{download_prefix}/v#{download_version}/#{filename}"
+
+  remote_file "#{Chef::Config['file_cache_path']}/#{filename}" do
+    source download_url
     owner 'root'
     group 'root'
     mode '0644'
   end
 
-  package "#{Chef::Config['file_cache_path']}/remote_syslog2.rpm"
+  case node['platform_family']
+  when 'rhel'
+    package "#{Chef::Config['file_cache_path']}/#{filename}"
+  when 'debian'
+    dpkg_package 'remote_syslog2' do
+      source "#{Chef::Config['file_cache_path']}/#{filename}"
+    end
+  end
 
   parts = node['system_core']['papertrail']['remote_host'].split(':')
   pt_protocol = node['system_core']['papertrail']['remote_syslog2']['protocol']
@@ -55,7 +75,8 @@ if node['system_core']['papertrail']['enabled']
               papertrail_protocol: pt_protocol)
   end
 
-  service 'remote-syslog' do
+  service_name = node['system_core']['papertrail']['remote_syslog2']['service_name']
+  service service_name do
     action [:start, :enable]
   end
 
