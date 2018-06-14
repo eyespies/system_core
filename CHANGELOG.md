@@ -1,5 +1,8 @@
 # system_core Cookbook Change Log
 
+## 2.1.1
+- Fix incorrect configuration file name for remote_syslog2
+
 ## 2.1.0
 - Allow specifying the timezone to use
 

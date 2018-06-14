@@ -29,8 +29,8 @@ node.default['system_core']['papertrail']['remote_syslog2']['source_url_prefix']
 node.default['system_core']['papertrail']['remote_syslog2']['version'] = '0.20'
 node.default['system_core']['papertrail']['remote_syslog2']['service_name'] = 'remote_syslog'
 
-node.default['system_core']['papertrail']['remote_syslog2']['config']['file_name'] = '/etc/log_files.yaml'
-node.default['system_core']['papertrail']['remote_syslog2']['config']['template_file'] = '/etc/log_files.yaml'
+node.default['system_core']['papertrail']['remote_syslog2']['config']['file_name'] = '/etc/log_files.yml'
+node.default['system_core']['papertrail']['remote_syslog2']['config']['template_file'] = '/etc/log_files.yml'
 node.default['system_core']['papertrail']['remote_syslog2']['config']['template_cookbook'] = 'system_core'
 node.default['system_core']['papertrail']['remote_syslog2']['config']['template_file'] = 'log_files.yaml.erb'
 
