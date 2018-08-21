@@ -27,7 +27,6 @@ chef exec bundle update
 ## Local Delivery
 
 **NOTE:** This is not yet in place, any help getting this in place is appreciated.
-For consistent testing across all our cookbooks we use the Delivery CLI tool and the local delivery mode. This allows us to remotely host a single Delivery project.toml file that applies to all of our cookbooks.
 
 Delivery defines testing in phases and cookbooks utilize `lint`, `syntax`, and `unit` phases.
 
