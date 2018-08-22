@@ -1,5 +1,8 @@
 # system_core Cookbook Change Log
 
+## 2.1.4
+- Use default to set sudo attributes so they can be overridden in JSON files
+
 ## 2.1.3
 - Use default to set the allow_groups for SSH so that downstream cookbooks can change the values even with JSON files
 
