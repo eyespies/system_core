@@ -1,5 +1,8 @@
 # system_core Cookbook Change Log
 
+## 2.1.5
+- Fix broken unit test
+
 ## 2.1.4
 - Use default to set sudo attributes so they can be overridden in JSON files
 

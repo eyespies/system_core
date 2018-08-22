@@ -39,7 +39,7 @@ if node['etc']['group']['vagrant']
   # "The allow/deny directives are processed in the following order: DenyUsers, AllowUsers, DenyGroups,
   # and finally AllowGroups.  All of the specified user and group tests must succeed, before user is allowed to
   # log in." so for 'vagrant' to login, we just need to ensure the vagrant group is allowed SSH access.
-  ssh_groups += " vagrant"
+  ssh_groups += ' vagrant'
 end
 node.default['openssh']['server']['allow_groups'] = ssh_groups
 
