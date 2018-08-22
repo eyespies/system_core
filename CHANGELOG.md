@@ -1,5 +1,8 @@
 # system_core Cookbook Change Log
 
+## 2.1.3
+- Use default to set the allow_groups for SSH so that downstream cookbooks can change the values even with JSON files
+
 ## 2.1.2
 - Use normal, not override, when setting allow_groups for SSH so that downstream cookbooks can change the values even with JSON files
 
