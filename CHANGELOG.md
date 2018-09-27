@@ -1,5 +1,8 @@
 # system_core Cookbook Change Log
 
+## 2.1.6
+- Fauxhai 6.7.0 is now Chef 14.x based (from the previous Chef 13.x) at least for Oracle; this broke the SSH vagrant lookup; fixed
+
 ## 2.1.5
 - Fix broken unit test
 

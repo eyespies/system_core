@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require 'mixlib/shellout'
 
 # ~ openssh ~ #
 case node['platform_family']
@@ -34,7 +35,10 @@ end
 # 'sshusers' group controls access for IPA accounts; 'root' group allows users to login as root
 # TODO: Make the SSH user group name an attribute
 ssh_groups = 'sshusers root'
-if node['etc']['group']['vagrant']
+find = Mixlib::ShellOut.new("grep vagrant /etc/group | awk -F: '{print $1}'")
+find.run_command
+
+if find.stdout == 'vagrant'
   # Per OpenSSH man page:
   # "The allow/deny directives are processed in the following order: DenyUsers, AllowUsers, DenyGroups,
   # and finally AllowGroups.  All of the specified user and group tests must succeed, before user is allowed to
