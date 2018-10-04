@@ -38,13 +38,13 @@ ssh_groups = 'sshusers root'
 find = Mixlib::ShellOut.new("grep vagrant /etc/group | awk -F: '{print $1}'")
 find.run_command
 
-if find.stdout == 'vagrant'
-  # Per OpenSSH man page:
-  # "The allow/deny directives are processed in the following order: DenyUsers, AllowUsers, DenyGroups,
-  # and finally AllowGroups.  All of the specified user and group tests must succeed, before user is allowed to
-  # log in." so for 'vagrant' to login, we just need to ensure the vagrant group is allowed SSH access.
-  ssh_groups += ' vagrant'
-end
+# Per OpenSSH man page:
+# "The allow/deny directives are processed in the following order: DenyUsers, AllowUsers, DenyGroups,
+# and finally AllowGroups.  All of the specified user and group tests must succeed, before user is allowed to
+# log in." so for 'vagrant' to login, we just need to ensure the vagrant group is allowed SSH access.
+ssh_groups += ' vagrant' if find.stdout.chomp == 'vagrant'
+ssh_groups.strip!
+
 node.default['openssh']['server']['allow_groups'] = ssh_groups
 
 accept_env = 'LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY'
