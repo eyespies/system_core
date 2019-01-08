@@ -1,5 +1,8 @@
 # system_core Cookbook Change Log
 
+## 3.0.1
+- (security) eliminate insecure SSH Ciphers
+
 ## 3.0.0
 - Update to latest yum-epel and yum cookbooks
 - Remove / update platforms that are now deprecated
