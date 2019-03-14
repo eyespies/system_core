@@ -32,7 +32,7 @@ node.default['system_core']['papertrail']['remote_syslog2']['service_name'] = 'r
 node.default['system_core']['papertrail']['remote_syslog2']['config']['file_name'] = '/etc/log_files.yml'
 node.default['system_core']['papertrail']['remote_syslog2']['config']['template_file'] = '/etc/log_files.yml'
 node.default['system_core']['papertrail']['remote_syslog2']['config']['template_cookbook'] = 'system_core'
-node.default['system_core']['papertrail']['remote_syslog2']['config']['template_file'] = 'log_files.yaml.erb'
+node.default['system_core']['papertrail']['remote_syslog2']['config']['template_file'] = 'log_files.yml.erb'
 
 node.default['system_core']['papertrail']['remote_syslog2']['protocol'] = 'tls'
 node.default['system_core']['papertrail']['remote_syslog2']['hostname'] = nil

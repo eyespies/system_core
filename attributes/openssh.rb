@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+require 'mixlib/shellout'
 
 # ~ openssh ~ #
 case node['platform_family']
@@ -34,14 +35,17 @@ end
 # 'sshusers' group controls access for IPA accounts; 'root' group allows users to login as root
 # TODO: Make the SSH user group name an attribute
 ssh_groups = 'sshusers root'
-if node['etc']['group']['vagrant']
-  # Per OpenSSH man page:
-  # "The allow/deny directives are processed in the following order: DenyUsers, AllowUsers, DenyGroups,
-  # and finally AllowGroups.  All of the specified user and group tests must succeed, before user is allowed to
-  # log in." so for 'vagrant' to login, we just need to ensure the vagrant group is allowed SSH access.
-  ssh_groups += "#{ssh_groups} vagrant"
-end
-node.override['openssh']['server']['allow_groups'] = ssh_groups
+find = Mixlib::ShellOut.new("grep vagrant /etc/group | awk -F: '{print $1}'")
+find.run_command
+
+# Per OpenSSH man page:
+# "The allow/deny directives are processed in the following order: DenyUsers, AllowUsers, DenyGroups,
+# and finally AllowGroups.  All of the specified user and group tests must succeed, before user is allowed to
+# log in." so for 'vagrant' to login, we just need to ensure the vagrant group is allowed SSH access.
+ssh_groups += ' vagrant' if find.stdout.chomp == 'vagrant'
+ssh_groups.strip!
+
+node.default['openssh']['server']['allow_groups'] = ssh_groups
 
 accept_env = 'LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY'
 accept_env = "#{accept_env} LC_MESSAGES LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT"
@@ -69,7 +73,6 @@ macs = case node['platform_family']
            %w[hmac-sha1
               umac-64@openssh.com
               hmac-ripemd160
-              hmac-sha1-96
               hmac-sha2-256
               hmac-sha2-512
               hmac-ripemd160@openssh.com]

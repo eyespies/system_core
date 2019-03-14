@@ -32,7 +32,7 @@ control 'remote-syslog' do
     it { should be_installed }
   end
 
-  describe file('/etc/log_files.yaml') do
+  describe file('/etc/log_files.yml') do
     it { should exist }
     it { should be_owned_by('root') }
     it { should be_grouped_into('root') }

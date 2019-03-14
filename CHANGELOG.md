@@ -1,5 +1,25 @@
 # system_core Cookbook Change Log
 
+## 3.0.1
+- (security) eliminate insecure SSH Ciphers
+
+## 3.0.0
+- Update to latest yum-epel and yum cookbooks
+- Remove / update platforms that are now deprecated
+- Fauxhai 6.7.0 is now Chef 14.x based (from the previous Chef 13.x) at least for Oracle; this broke the SSH vagrant lookup; fixed
+
+## 2.1.5
+- Fix broken unit test
+
+## 2.1.4
+- Use default to set sudo attributes so they can be overridden in JSON files
+
+## 2.1.3
+- Use default to set the allow_groups for SSH so that downstream cookbooks can change the values even with JSON files
+
+## 2.1.2
+- Use normal, not override, when setting allow_groups for SSH so that downstream cookbooks can change the values even with JSON files
+
 ## 2.1.1
 - Fix incorrect configuration file name for remote_syslog2
 
