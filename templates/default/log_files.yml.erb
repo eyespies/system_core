@@ -1,9 +1,9 @@
-<% if @config[:hostname] -%>
-hostname: <%= @config[:hostname] %>
+<% if @config['hostname'] -%>
+hostname: <%= @config['hostname'] %>
 <% end -%>
-<% if @config.key?(:files) && !@config[:files].nil? -%>
 files:
-<%   @config[:files].each do |file, tag| -%>
+<% if @config.key('files')
+     @config['files'].each do |file, tag| -%>
   - path: <%= file %>
 <%     unless tag.nil? -%>
     tag: <%= tag %>
@@ -15,9 +15,9 @@ destination:
   host: <%= @papertrail_host %>
   port: <%= @papertrail_port %>
   protocol: <%= @papertrail_protocol %>
-<% if @config.key?(:exclude_patterns) && !@config[:exclude_patterns].nil? -%>
+<% if @config.key?('exclude_patterns') -%>
 exclude_patterns:
-<%   @config[:exclude_patterns].each do |pattern| -%>
+<%   @config['exclude_patterns'].each do |pattern| -%>
   - <%= pattern %>
 <%   end
    end
