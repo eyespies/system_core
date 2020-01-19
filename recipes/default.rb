@@ -35,12 +35,12 @@ node.normal['set_fqdn'] = if Chef::Config[:node_name] =~ /#{node['system_core'][
 node.normal['hostname_cookbook']['hostsfile_ip'] = '127.0.0.1' if node['platform_family'] == 'rhel'
 
 # Without this line, the 'hostname' cookbook sets:
-#  -127.0.0.1	full-oracle-73.linux.example.com full-oracle-73
-#  +127.0.0.1	full-oracle-73.linux.example.com full-oracle-73 localhost
+#  -127.0.0.1 full-oracle-73.linux.example.com full-oracle-73
+#  +127.0.0.1 full-oracle-73.linux.example.com full-oracle-73 localhost
 #
 # but then a moment letter sets:
-#  -127.0.0.1	full-oracle-73.linux.example.com full-oracle-73 localhost
-#  +127.0.0.1	full-oracle-73.linux.example.com full-oracle-73
+#  -127.0.0.1 full-oracle-73.linux.example.com full-oracle-73 localhost
+#  +127.0.0.1 full-oracle-73.linux.example.com full-oracle-73
 #
 # If using a real IP for the hostfile_ip attribute, then this should not be used.
 node.normal['hostname_cookbook']['hostsfile_aliases'] = ['localhost']
