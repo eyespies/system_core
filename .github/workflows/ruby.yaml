@@ -13,11 +13,25 @@ jobs:
       uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.5
-    - name: Build and test with Rake
+    - name: Setup Ruby
       env:
         UNIT_AND_LINT: "1"
       run: |
         gem update --system
         gem install bundler
         bundle install --jobs 4 --retry 3
-        bundle exec rake lint spec
+    - name: Code Linting
+      env:
+        UNIT_AND_LINT: "1"
+      run: |
+        bundle exec rake lint
+    - name: Unit Tests
+      env:
+        UNIT_AND_LINT: "1"
+      run: |
+        bundle exec rake spec
+    # - name: Integration Tests
+    #   env:
+    #     UNIT_AND_LINT: "1"
+    #   run: |
+    #     bundle exec rake kitchen-ec2
