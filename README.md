@@ -1,5 +1,5 @@
-system_core Cookbook
-=======================
+# system_core Cookbook
+
 Performs general system configuration that is core to all servers. Also provides some attributes that are
 leveraged by other cookbooks, although attempts aremade to limit such dependencies. Examples of 'core'
 configuration including SSH, the AWS CLI, bash customizations, logrotate, NTP, rsyslog, selinux, and mail
@@ -8,9 +8,10 @@ server configuration.
 *Note* that this cookbook depends and a number of other cookbooks to perform the actual work, this is
 essentially just a wrapper around those cookbooks.
 
-Requirements
-------------
-#### cookbooks
+## Requirements
+
+### cookbooks
+
 - awscli
 - bzip2
 - hostnames
@@ -30,7 +31,8 @@ Requirements
 - yum
 - yum-epel
 
-#### packages
+### packages
+
 - `curl` - for when files are needed from FTP / HTTP / etc
 - `logrotate` - used to keep the disks from filling up with big log files
 - `jq` - enables processing JSON from shell scripts
@@ -42,14 +44,15 @@ Requirements
 - `wget` - an alternative to `curl`
 - `yum` - package management for RHEL / CentOS / Oracle family
 
-Attributes
-----------
+## Attributes
+
 Attributes are available from the various files in the _attributes/_ path, please review the files there
 for all details about attributes.
 
-Usage
------
-#### system_core::default
+## Usage
+
+### system_core::default
+
 TODO: Write usage instructions for each recipe.
 
 e.g.
@@ -64,6 +67,6 @@ Just include `system_core` in your node's `run_list`:
 }
 ```
 
-License and Authors
--------------------
+## License and Authors
+
 Authors: Justin Spies <justin@thespies.org>
