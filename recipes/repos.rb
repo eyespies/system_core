@@ -62,6 +62,7 @@ if node['platform'] =~ /oracle/ && node['platform_version'] =~ /^7/
     make_cache false
     action :create
   end
+
   # Required so that python-cheetah / python-pygments installs successfully. CentOS automatically provides
   # access to python-pygments while RHEL and Oracle put it into the 'optional' repo which is disabled by default
   # Only needed for RHEL 7 / Oracle 7 but not CentOS.
