@@ -49,7 +49,7 @@ describe 'system_core::repos' do
               expect(chef_run).to delete_file('/etc/yum.repos.d/public-yum-ol7.repo')
             end
 
-            %w[ol7_optional_latest ol7_base_latest ol7_uek4_latest].each do |repo|
+            %w[ol7_optional_latest ol7_base_latest ol7_uek4_latest ol7_uek5_latest].each do |repo|
               it "should enable the '#{repo}' repo for Oracle Linux 7" do
                 expect(chef_run).to create_yum_repository(repo)
               end
