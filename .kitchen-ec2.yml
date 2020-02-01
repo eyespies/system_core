@@ -1,19 +1,111 @@
 ---
 driver:
   name: ec2
-  aws_ssh_key_id: id_rsa-aws
-  security_group_ids: ["sg-12345678"]
-  region: us-east-2
-  availability_zone: b
   require_chef_omnibus: true
-  subnet_id: subnet-6e5d4c3b
-  iam_profile_name: chef-client
-  instance_type: t3.medium
+  aws_ssh_key_id: "<%= ENV.has_key?('AWS_SSH_KEY_ID') ? ENV['AWS_SSH_KEY_ID'] : 'bitbucket-pipelines' %>"
+  security_group_ids: ["<%= ENV['DRIVER_SECURITY_GROUP_IDS'] %>"]
+  region: "<%= ENV['AWS_DEFAULT_REGION'] %>"
+  # This is needed only if the subnet_filter element is not used.
+  # availability_zone: "<%= ENV['DRIVER_AVAILABILITY_ZONE'] %>"
+  # subnet_id: "<%= ENV['DRIVER_SUBNET_ID'] %>"
+  subnet_filter:
+    tag: "ChefTests"
+    value: "true"
+  iam_profile_name: ChefTestKitchen
+  # Spot price is required for kitchen-ec2 < 3.0.0; later versions allow setting this to 'ondemand'
+  spot_price: "ondemand"
+  # The documentation for kitchen-ec2 states that an array of options can be specified, however the AWS SDK call fails with the error:
+  #   Message: Failed to complete #create action: [expected params[:launch_specification][:instance_type] to be a
+  #   String, got value ["c5dlarge", "r5d.large", "m5d.large", "m5d.xlarge"] (class: Array) instead.]
+  # instance_type: "<%=  ENV.has_key?('DRIVER_INSTANCE_TYPE') ? ENV['DRIVER_INSTANCE_TYPE'] : 'm5d.large' %>"
+  # Specifying an array is only available with kitchen-ec2 v 3.x
+  instance_type:
+    - c5d.large
+    - m5d.large
+    - r5d.large
+    - c5d.xlarge
+    - m5d.xlarge
+    - r5d.xlarge
   associate_public_ip: true
   interface: dns
+  # The default Oracle EC2 instance includes 'yum update -y' in the runcmd section; this causes problems when running Chef
+  # because the updating takes long enough that it is still running when Chef runs. This in turn causes any 'package'
+  # resources in Chef to fail because the RPM DB / Yum is already locked. The below is the Cloud Init taken directly from
+  # an Oracle EC2 instance.
+  user_data: |
+    #cloud-config
+    users:
+    - default
+
+    disable_root: 1
+    ssh_pwauth:   0
+
+    mount_default_fields: [~, ~, 'auto', 'defaults,nofail', '0', '2']
+    resize_rootfs_tmp: /dev
+    ssh_deletekeys:   0
+    ssh_genkeytypes:  ~
+    syslog_fix_perms: ~
+
+    cloud_init_modules:
+    - migrator
+    - bootcmd
+    - write-files
+    - growpart
+    - resizefs
+    - set_hostname
+    - update_hostname
+    - update_etc_hosts
+    - rsyslog
+    - users-groups
+    - ssh
+
+    cloud_config_modules:
+    - mounts
+    - locale
+    - set-passwords
+    - yum-add-repo
+    - package-update-upgrade-install
+    - timezone
+    - puppet
+    - chef
+    - salt-minion
+    - mcollective
+    - disable-ec2-metadata
+    - runcmd
+
+    cloud_final_modules:
+    - rightscale_userdata
+    - scripts-per-once
+    - scripts-per-boot
+    - scripts-per-instance
+    - scripts-user
+    - ssh-authkey-fingerprints
+    - keys-to-console
+    - phone-home
+    - final-message
+
+    system_info:
+      default_user:
+        name: ec2-user
+        lock_passwd: true
+        gecos: Cloud User
+        groups: [wheel, adm, systemd-journal]
+        sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+        shell: /bin/bash
+      distro: rhel
+      paths:
+        cloud_dir: /var/lib/cloud
+        templates_dir: /etc/cloud/templates
+      ssh_svcname: sshd
+
+    runcmd:
+      ["test -e /usr/bin/ol_yum_configure.sh && sh /usr/bin/ol_yum_configure.sh"]
+
+    # vim:syntax=yaml
+
 
 transport:
-  ssh_key: /path/to/id_rsa-aws
+  ssh_key: "<%= ENV.has_key?('SSH_PRIVATE_KEY') ? ENV['SSH_PRIVATE_KEY'] : '~/.ssh/id_rsa' %>"
   connection_timeout: 10
   connection_retries: 5
   # username: ubuntu
@@ -26,7 +118,9 @@ provisioner:
   #   always_update_cookbooks: <%= !ENV['CI'] %>
   always_update_cookbooks: true
   chef_license: accept
-  # log_level: info
+  # This sets the logging level for Chef inside of the instance. To set the log level for Test
+  # Kitchen itself, use '-l debug' at the command line when running Kitchen.
+  # log_level: debug
 
 verifier:
   name: inspec
@@ -70,25 +164,46 @@ platforms:
   #     username: centos
   - name: oracle-6.10
     driver:
-      image_search:
-        owner-id: "131827586825"
-        name: "OL6.10"
+      # To find the image ID for Oracle instances, use the command below, making sure to replace the 'OL7.6' with the correct name prefix
+      # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true,Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^OL6.10")) | .ImageId'`
+      image_id: "<%= ENV['PLATFORMS_ORACLE610_DRIVER_IMAGEID'] %>"
+      # This doesn't work well because there is no 'standard_platform/oracle.rb' configuration file for the driver.
+      # image_search:
+      #   architecture: "x86_64"
+      #   is-public: true
+      #   name: "OL7.6-X86_64-HVM-*"
+      #   owner-id: "131827586825"
+      #   virtualization-type: "hvm"
     transport:
-      username: oracle
+      username: ec2-user
   - name: oracle-7.6
     driver:
-      image_search:
-        owner-id: "131827586825"
-        name: "OL7.6"
+      # To find the image ID for Oracle instances, use the command below, making sure to replace the 'OL7.6' with the correct name prefix
+      # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true,Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^OL6.10")) | .ImageId'`
+      image_id: "<%= ENV['PLATFORMS_ORACLE610_DRIVER_IMAGEID'] %>"
+      # This doesn't work well because there is no 'standard_platform/oracle.rb' configuration file for the driver.
+      # image_search:
+      #   architecture: "x86_64"
+      #   is-public: true
+      #   name: "OL7.6-X86_64-HVM-*"
+      #   owner-id: "131827586825"
+      #   virtualization-type: "hvm"
     transport:
-      username: oracle
+      username: ec2-user
   - name: oracle-8.1
     driver:
-      image_search:
-        owner-id: "131827586825"
-        name: "OL8.1"
+      # To find the image ID for Oracle instances, use the command below, making sure to replace the 'OL7.6' with the correct name prefix
+      # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true,Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^OL6.10")) | .ImageId'`
+      image_id: "<%= ENV['PLATFORMS_ORACLE610_DRIVER_IMAGEID'] %>"
+      # This doesn't work well because there is no 'standard_platform/oracle.rb' configuration file for the driver.
+      # image_search:
+      #   architecture: "x86_64"
+      #   is-public: true
+      #   name: "OL7.6-X86_64-HVM-*"
+      #   owner-id: "131827586825"
+      #   virtualization-type: "hvm"
     transport:
-      username: oracle
+      username: ec2-user
 
 suites:
   - name: base
@@ -163,6 +278,7 @@ suites:
     data_bags_path: "../../data_bags"
     run_list:
       - recipe[system_core::default]
+      - recipe[system_core::repos]
       - recipe[system_core::rbenv]
   - name: altdomain
     data_bags_path: "../../data_bags"
