@@ -1,5 +1,13 @@
 # system_core Cookbook Change Log
 
+## 4.1.0
+
+- Justin Spies - (feature) remove unused Kitchen configuration for Docker / Dokken
+- Justin Spies - (feature) update with tested `.kitchen-ec2.yml`
+- Justin Spies - (feature) update config to work with Rubocop 0.55
+- Justin Spies - (fix) support EC2 instances by allowing SSH access to servers via the `ec2-user`
+- Justin Spies - (doc) update copyright dates
+
 ## 4.0.0
 
 - Justin Spies - (breaking) upgrade default Ruby version from 2.2.2 to 2.6.5
