@@ -4,27 +4,28 @@ AllCops:
     - vendor/**/*
   DisplayCopNames: true
 
-AlignParameters:
-  Enabled: false
-
-Encoding:
-  Enabled: false
-
-LineLength:
-  Max: 180
-
-StringLiterals:
+Layout/AlignParameters:
   Enabled: false
 
 Layout/SpaceBeforeFirstArg:
   Exclude:
     - 'metadata.rb'
 
-Metrics/MethodLength:
-  Max: 35
-
 Metrics/BlockLength:
   Max: 35
+
+Metrics/LineLength:
+  Max: 180
+
+Style/Encoding:
+  Enabled: false
+
+# TODO: Enable this in the future.
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
 
 Style/SymbolArray:
   Enabled: false
