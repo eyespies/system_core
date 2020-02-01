@@ -32,17 +32,36 @@ else
   Chef::Log.warn("Unsupported OS platform #{node['platform']} when setting SSH HostKey settings")
 end
 
-# 'sshusers' group controls access for IPA accounts; 'root' group allows users to login as root
-# TODO: Make the SSH user group name an attribute
-ssh_groups = 'sshusers root'
-find = Mixlib::ShellOut.new("grep vagrant /etc/group | awk -F: '{print $1}'")
-find.run_command
 
+# 
+# SSH Access Controls ~~ SEE NOTE BELOW ~~
+#
 # Per OpenSSH man page:
 # "The allow/deny directives are processed in the following order: DenyUsers, AllowUsers, DenyGroups,
 # and finally AllowGroups.  All of the specified user and group tests must succeed, before user is allowed to
 # log in." so for 'vagrant' to login, we just need to ensure the vagrant group is allowed SSH access.
+#
+# 'sshusers' group controls access for IPA accounts; 'root' group allows users to login as root
+# TODO: Make the SSH user group name an attribute
+
+# Should the group be created? Defaults to false in cases where LDAP / AD is used.
+node.default['system_core']['ssh']['group']['create'] = false
+# The name of the group used to allow SSH access.
+node.default['system_core']['ssh']['group']['name'] = 'sshusers'
+
+ssh_groups = "#{node['system_core']['ssh']['group']['name']} root"
+find = Mixlib::ShellOut.new("grep vagrant /etc/group | awk -F: '{print $1}'")
+find.run_command
+
+# Allow vagrant to SSH; this is for test kitchen.
 ssh_groups += ' vagrant' if find.stdout.chomp == 'vagrant'
+ssh_groups.strip!
+
+find = Mixlib::ShellOut.new("grep ec2-user /etc/group | awk -F: '{print $1}'")
+find.run_command
+
+# Allow ec2-user to SSH; this is for test kitchen.
+ssh_groups += ' ec2-user' if find.stdout.chomp == 'ec2-user'
 ssh_groups.strip!
 
 node.default['openssh']['server']['allow_groups'] = ssh_groups
