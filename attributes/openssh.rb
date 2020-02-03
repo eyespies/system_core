@@ -32,8 +32,7 @@ else
   Chef::Log.warn("Unsupported OS platform #{node['platform']} when setting SSH HostKey settings")
 end
 
-
-# 
+#
 # SSH Access Controls ~~ SEE NOTE BELOW ~~
 #
 # Per OpenSSH man page:
