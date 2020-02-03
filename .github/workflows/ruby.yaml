@@ -18,7 +18,7 @@ jobs:
         UNIT_AND_LINT: "1"
       run: |
         gem update --system
-        gem install bundler
+        gem install bundler --version=1.17
         bundle install --jobs 4 --retry 3
     - name: Code Linting
       env:
