@@ -180,7 +180,7 @@ platforms:
     driver:
       # To find the image ID for Oracle instances, use the command below, making sure to replace the 'OL7.6' with the correct name prefix
       # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true,Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^OL6.10")) | .ImageId'`
-      image_id: "<%= ENV['PLATFORMS_ORACLE610_DRIVER_IMAGEID'] %>"
+      image_id: "<%= ENV['PLATFORMS_ORACLE76_DRIVER_IMAGEID'] %>"
       # This doesn't work well because there is no 'standard_platform/oracle.rb' configuration file for the driver.
       # image_search:
       #   architecture: "x86_64"
@@ -190,20 +190,20 @@ platforms:
       #   virtualization-type: "hvm"
     transport:
       username: ec2-user
-  - name: oracle-8.1
-    driver:
-      # To find the image ID for Oracle instances, use the command below, making sure to replace the 'OL7.6' with the correct name prefix
-      # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true,Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^OL6.10")) | .ImageId'`
-      image_id: "<%= ENV['PLATFORMS_ORACLE610_DRIVER_IMAGEID'] %>"
-      # This doesn't work well because there is no 'standard_platform/oracle.rb' configuration file for the driver.
-      # image_search:
-      #   architecture: "x86_64"
-      #   is-public: true
-      #   name: "OL7.6-X86_64-HVM-*"
-      #   owner-id: "131827586825"
-      #   virtualization-type: "hvm"
-    transport:
-      username: ec2-user
+  # - name: oracle-8.1
+  #   driver:
+  #     # To find the image ID for Oracle instances, use the command below, making sure to replace the 'OL7.6' with the correct name prefix
+  #     # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true,Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^OL6.10")) | .ImageId'`
+  #     image_id: "<%= ENV['PLATFORMS_ORACLE81_DRIVER_IMAGEID'] %>"
+  #     # This doesn't work well because there is no 'standard_platform/oracle.rb' configuration file for the driver.
+  #     # image_search:
+  #     #   architecture: "x86_64"
+  #     #   is-public: true
+  #     #   name: "OL7.6-X86_64-HVM-*"
+  #     #   owner-id: "131827586825"
+  #     #   virtualization-type: "hvm"
+  #   transport:
+  #     username: ec2-user
 
 suites:
   - name: base
