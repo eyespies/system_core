@@ -25,7 +25,6 @@ driver:
     - r5d.large
     - c5d.xlarge
     - m5d.xlarge
-    - r5d.xlarge
   associate_public_ip: true
   interface: dns
   # The default Oracle EC2 instance includes 'yum update -y' in the runcmd section; this causes problems when running Chef

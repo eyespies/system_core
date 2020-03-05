@@ -18,55 +18,63 @@ jobs:
         UNIT_AND_LINT: "1"
       run: |
         gem update --system
+        gem install bundler -v 1.17
         # Using a custom version because the Github Ruby 2.6 includes Bundler 2.1 while ChefDK normally uses 1.17
-        bundle install --gemfile Gemfile-github --jobs 4 --retry 3
-        env | egrep -v '^AWS_(ACCESS_KEY|SECRET_ACCESS_KEY)' | sort
+        bundle _1.17_ install --jobs 4 --retry 3
     - name: Code Linting
       env:
         UNIT_AND_LINT: "1"
       run: |
-        bundle exec rake lint
-    - name: Unit Tests
-      env:
-        UNIT_AND_LINT: "1"
-      run: |
-        bundle exec rake spec
+        bundle _1.17_ exec rake lint
+    # - name: Unit Tests
+    #   env:
+    #     UNIT_AND_LINT: "1"
+    #   run: |
+    #     bundle _1.17_ exec rake spec
     - name: Integration Tests
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: "us-east-1"
         AWS_REGION: "us-east-1"
+        AWS_SSH_KEY_ID: "${{ secrets.AWS_SSH_KEY_ID }}"
+        AWS_SSH_PRIVATE_KEY: "${{ secrets.AWS_SSH_PRIVATE_KEY }}"
+        DRIVER_SECURITY_GROUP_IDS: "${{ secrets.DRIVER_SECURITY_GROUP_IDS }}"
         INSTANCE: "base-oracle-7"
         KITCHEN_YAML: ".kitchen-ec2.yml"
-        AWS_SSH_PRIVATE_KEY: "${{ secrets.AWS_SSH_PRIVATE_KEY }}"
+        PLATFORMS_ORACLE76_DRIVER_IMAGEID: "ami-06e5c2a0f634abeb1"
+        SSH_KEY_BUCKET: "${{ secrets.SSH_KEY_BUCKET }}"
+        SSH_PRIVATE_KEY: "/home/runner/.ssh/chef-test-kitchen.pem"
         UNIT_AND_LINT: "1"
+      # To test this locally, use Docker:
+      # BUCKET="<bucket for SSH private keys>"
+      # AWS_DEFAULT_REGION="us-east-1"
+      # SGID="$(aws ec2 describe-security-groups --region $AWS_DEFAULT_REGION | jq -r '.SecurityGroups[] | select(.Tags != null) | select(.Tags[].Key == "ChefTestKitchen" and .Tags[].Value == "true") | .GroupId')"
+      # AMIID="$(aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true,Name=virtualization-type,Values=hvm' --region $AWS_DEFAULT_REGION | jq -r '.Images[] | select(.Name | test("^OL7.6")) | .ImageId')"
+      # docker run \
+      #   -e DRIVER_SECURITY_GROUP_IDS="${SGID}" \
+      #   -e AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION \
+      #   -e KITCHEN_YAML=.kitchen-ec2.yml \
+      #   -e SSH_PRIVATE_KEY=/root/.ssh/chef-test-kitchen.pem \
+      #   -e AWS_SSH_PRIVATE_KEY="$(cat ~/.ssh/chef-test-kitchen.pem)" \
+      #   -e PLATFORMS_ORACLE76_DRIVER_IMAGEID=$AMIID \
+      #   -e CI=true -e INSTANCE=base-oracle-7 \
+      #   -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+      #   -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+      #   -e AWS_SSH_KEY_ID=chef-test-kitchen \
+      #   -e SSH_KEY_BUCKET=${BUCKET} \
+      #   -v /Users/justin/.ssh:/root/.ssh \
+      #   -v $(pwd)/..:/chef \
+      #   -it ruby:2.6 /bin/bash
       run: |
         env | egrep -v '^AWS_(ACCESS_KEY|SECRET_ACCESS_KEY|AWS_SSH_PRIVATE_KEY)' | sort
         test -d ~/.ssh || mkdir ~/.ssh
         chmod 0700 ~/.ssh
-        ls -latr ~/.ssh/
         printf '%s' "$AWS_SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/chef-test-kitchen.pem
-        printf '\n' > ~/.ssh/chef-test-kitchen.pem
+        printf '\n' >> ~/.ssh/chef-test-kitchen.pem
         chmod 0600 ~/.ssh/chef-test-kitchen.pem
-        # To test this locally, use Docker:
-        # BUCKET="<bucket for SSH private keys>"
-        # AWS_DEFAULT_REGION="us-east-1"
-        # SGID="$(aws ec2 describe-security-groups --region $AWS_DEFAULT_REGION | jq -r '.SecurityGroups[] | select(.Tags != null) | select(.Tags[].Key == "ChefTestKitchen" and .Tags[].Value == "true") | .GroupId')"
-        # AMIID="$(aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true,Name=virtualization-type,Values=hvm' --region $AWS_DEFAULT_REGION | jq -r '.Images[] | select(.Name | test("^OL7.6")) | .ImageId')"
-        # docker run \
-        #   -e DRIVER_SECURITY_GROUP_IDS="${SGID}" \
-        #   -e AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION \
-        #   -e KITCHEN_YAML=.kitchen-ec2.yml \
-        #   -e SSH_PRIVATE_KEY=/root/.ssh/chef-test-kitchen.pem \
-        #   -e AWS_SSH_PRIVATE_KEY="$(cat ~/.ssh/chef-test-kitchen.pem)" \
-        #   -e PLATFORMS_ORACLE76_DRIVER_IMAGEID=$AMIID \
-        #   -e CI=true -e INSTANCE=default-oracle-76 \
-        #   -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
-        #   -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
-        #   -e AWS_SSH_KEY_ID=chef-test-kitchen \
-        #   -e SSH_KEY_BUCKET=${BUCKET} \
-        #   -v /Users/justin/.ssh:/root/.ssh \
-        #   -v $(pwd)/..:/chef \
-        #   -it ruby:2.6 /bin/bash
-        bundle exec rake kitchen_ec2
+        printf ' =====  SSH Key =====\n'
+        ls -latr ~/.ssh/
+        head -2 ~/.ssh/chef-test-kitchen.pem
+        printf ' =====  END SSH Key =====\n'
+        bundle _1.17_ exec rake kitchen_ec2
