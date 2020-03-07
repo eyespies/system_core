@@ -49,14 +49,14 @@ node.default['system_core']['ssh']['group']['create'] = false
 node.default['system_core']['ssh']['group']['name'] = 'sshusers'
 
 ssh_groups = "#{node['system_core']['ssh']['group']['name']} root"
-find = Mixlib::ShellOut.new("grep vagrant /etc/group | awk -F: '{print $1}'")
+find = Mixlib::ShellOut.new("grep ^vagrant /etc/group | awk -F: '{print $1}'")
 find.run_command
 
 # Allow vagrant to SSH; this is for test kitchen.
 ssh_groups += ' vagrant' if find.stdout.chomp == 'vagrant'
 ssh_groups.strip!
 
-find = Mixlib::ShellOut.new("grep ec2-user /etc/group | awk -F: '{print $1}'")
+find = Mixlib::ShellOut.new("grep ^ec2-user /etc/group | awk -F: '{print $1}'")
 find.run_command
 
 # Allow ec2-user to SSH; this is for test kitchen.

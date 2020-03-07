@@ -5,6 +5,7 @@
 - Justin Spies - (feature) remove unused Kitchen configuration for Docker / Dokken
 - Justin Spies - (feature) update with tested `.kitchen-ec2.yml`
 - Justin Spies - (feature) update config to work with Rubocop 0.55
+- Justin Spies - (feature) add integration tests
 - Justin Spies - (fix) support EC2 instances by allowing SSH access to servers via the `ec2-user`
 - Justin Spies - (doc) update copyright dates
 
