@@ -74,7 +74,7 @@ if node['platform'] =~ /oracle/ && node['platform_version'] =~ /^7/
     action :create
   end
 elsif node['platform'] =~ /oracle/ && node['platform_version'] =~ /^8/
-    # Deleting because it conflicts with Chef setting up the other repositories and causes errors about the
+  # Deleting because it conflicts with Chef setting up the other repositories and causes errors about the
   # same repo defined twice.
   file '/etc/yum.repos.d/oracle-linux-ol8.repo' do
     action :delete
@@ -126,13 +126,12 @@ elsif node['platform'] =~ /oracle/ && node['platform_version'] =~ /^8/
     make_cache true
     action :create
   end
-else
+elsif node['platform_family'] == 'rhel'
   # Include only if not using Oracle Linux >= 7 because the public EPEL repo conflicts
   # with the other Oracle repos (e.g. the Oracle base repo includes packages that are
   # also in the public EPEL repo but with different versions.)
-  include_recipe 'yum-epel' if node['platform_family'] == 'rhel'
+  include_recipe 'yum-epel'
 end
-
 
 # Install common packages
 node['system_core']['system']['packages'].each do |pkg|

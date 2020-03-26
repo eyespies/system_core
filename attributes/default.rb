@@ -26,7 +26,7 @@ node.default['system_core']['system']['packages'] = case node['platform_family']
                                                     when 'rhel'
                                                       if node['platform_version'] =~ /^8/
                                                         if node['platform'] =~ /oracle/
-                                                          # Note that htop and screen are not available from 
+                                                          # Note that htop and screen are not available from
                                                           # the Oracle EPEL repo, but using the public repo causes
                                                           # conflicts with the other Oracle repos...
                                                           %w[acpid rsyslog gnutls rsyslog-gnutls vim-enhanced
@@ -40,13 +40,13 @@ node.default['system_core']['system']['packages'] = case node['platform_family']
                                                              htop bash-completion gcc ruby-devel zlib-devel
                                                              ipa-client xfsprogs xfsprogs-devel xfsdump
                                                              tmux mutt cloud-init sysstat]
-                                                          end
+                                                        end
                                                       else
                                                         %w[rsyslog gnutls rsyslog-gnutls perl-YAML-LibYAML acpid
-                                                          python-cheetah python-configobj vim-enhanced screen
-                                                          python-pip git htop bash-completion gcc ruby-devel
-                                                          zlib-devel ipa-client xfsprogs xfsprogs-devel
-                                                          tmux xfsdump mutt cloud-init sysstat]
+                                                           python-cheetah python-configobj vim-enhanced screen
+                                                           python-pip git htop bash-completion gcc ruby-devel
+                                                           zlib-devel ipa-client xfsprogs xfsprogs-devel
+                                                           tmux xfsdump mutt cloud-init sysstat]
                                                       end
                                                     when 'debian'
                                                       %w[rsyslog gnutls-bin libgnutls30 rsyslog-gnutls libyaml-perl acpid
