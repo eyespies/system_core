@@ -11,6 +11,10 @@ describe 'system_core::auditd' do
           runner.converge(described_recipe)
         end
 
+        it 'should install auditd' do
+          expect(chef_run).to install_package('auditd')
+        end
+
         it 'should configure auditd' do
           resource = chef_run.service('auditd')
           expect(resource).to do_nothing
