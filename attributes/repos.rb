@@ -17,7 +17,14 @@
 # limitations under the License.
 #
 
-node.default['system_core']['repos']['ol7_base_latest']['url']     = 'http://yum.oracle.com/repo/OracleLinux/OL7/latest/$basearch/'
-node.default['system_core']['repos']['ol7_uek4_latest']['url']     = 'http://yum.oracle.com/repo/OracleLinux/OL7/UEKR4/$basearch/'
-node.default['system_core']['repos']['ol7_uek5_latest']['url']     = 'http://yum.oracle.com/repo/OracleLinux/OL7/UEKR5/$basearch/'
-node.default['system_core']['repos']['ol7_optional_latest']['url'] = 'http://yum.oracle.com/repo/OracleLinux/OL7/optional/latest/$basearch/'
+node.default['system_core']['repos']['ol7_base_latest']['url']     = 'https://yum.oracle.com/repo/OracleLinux/OL7/latest/$basearch/'
+node.default['system_core']['repos']['ol7_uek4_latest']['url']     = 'https://yum.oracle.com/repo/OracleLinux/OL7/UEKR4/$basearch/'
+node.default['system_core']['repos']['ol7_uek5_latest']['url']     = 'https://yum.oracle.com/repo/OracleLinux/OL7/UEKR5/$basearch/'
+node.default['system_core']['repos']['ol7_optional_latest']['url'] = 'https://yum.oracle.com/repo/OracleLinux/OL7/optional/latest/$basearch/'
+
+
+node.default['system_core']['repos']['ol8_addons_latest']['url']    = 'https://yum.oracle.com/repo/OracleLinux/OL8/addons/$basearch/'
+node.default['system_core']['repos']['ol8_appstream_latest']['url'] = 'https://yum.oracle.com/repo/OracleLinux/OL8/appstream/$basearch/'
+node.default['system_core']['repos']['ol8_base_latest']['url']      = 'https://yum.oracle.com/repo/OracleLinux/OL8/baseos/latest/$basearch/'
+node.default['system_core']['repos']['ol8_codeready_latest']['url'] = 'https://yum.oracle.com/repo/OracleLinux/OL8/codeready/builder/$basearch/'
+node.default['system_core']['repos']['ol8_epel_latest']['url']      = 'https://yum.oracle.com/repo/OracleLinux/OL8/developer/EPEL/$basearch/'
