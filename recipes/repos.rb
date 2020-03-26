@@ -33,6 +33,9 @@ if node['platform'] =~ /oracle/ && node['platform_version'] =~ /^7/
     action :delete
   end
 
+  # OL 7 ; this should not run for OL 8; for other EL platforms, see the bottom of the "if node ..."
+  include_recipe 'yum-epel'
+
   # TODO: Allow overriding the baseurl so that local YUM servers can be used.
   # Only needed for RHEL 7 / Oracle 7 but not CentOS.
   yum_repository 'ol7_base_latest' do
