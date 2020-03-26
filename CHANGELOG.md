@@ -1,5 +1,9 @@
 # system_core Cookbook Change Log
 
+## 4.2.0
+
+- Justin Spies - (feature) support OL8 and chrony
+
 ## 4.1.0
 
 - Justin Spies - (feature) remove unused Kitchen configuration for Docker / Dokken

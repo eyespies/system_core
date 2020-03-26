@@ -6,10 +6,11 @@ issues_url       'https://github.com/eyespies/system_core/issues'
 license          'Apache-2.0'
 description      'Core operating system configuration for Enterprise Linux'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '4.1.0'
+version          '4.2.0'
 chef_version     '>= 12'
 
 depends 'apt', '~> 7.2.0'
+depends 'chrony', '~> 0.3.0'
 # This is the 3ofcoins version and is the one from which all others are forked. Tried using the 'hostnames' version
 # from nathantsoi, however it does not properly support Oracle Linux. It also generates Chef warnings and although a
 # PR was submitted in January 2017 to eliminate the warnings, as of August 2017 the maintainer has not merged the PR.

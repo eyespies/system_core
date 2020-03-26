@@ -19,7 +19,6 @@
 
 # Used to install various outside packages
 include_recipe 'yum' if node['platform_family'] == 'rhel'
-include_recipe 'yum-epel' if node['platform_family'] == 'rhel'
 include_recipe 'apt::default' if node['platform_family'] == 'debian'
 
 # Avoid caching something we don't need cached.
@@ -41,7 +40,7 @@ if node['platform'] =~ /oracle/ && node['platform_version'] =~ /^7/
     baseurl node['system_core']['repos']['ol7_base_latest']['url']
     gpgkey 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle'
     gpgcheck true
-    make_cache false
+    make_cache true
     action :create
   end
 
@@ -50,7 +49,7 @@ if node['platform'] =~ /oracle/ && node['platform_version'] =~ /^7/
     baseurl node['system_core']['repos']['ol7_uek4_latest']['url']
     gpgkey 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle'
     gpgcheck true
-    make_cache false
+    make_cache true
     action :create
   end
 
@@ -59,7 +58,7 @@ if node['platform'] =~ /oracle/ && node['platform_version'] =~ /^7/
     baseurl node['system_core']['repos']['ol7_uek5_latest']['url']
     gpgkey 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle'
     gpgcheck true
-    make_cache false
+    make_cache true
     action :create
   end
 
@@ -71,10 +70,69 @@ if node['platform'] =~ /oracle/ && node['platform_version'] =~ /^7/
     baseurl node['system_core']['repos']['ol7_optional_latest']['url']
     gpgkey 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle'
     gpgcheck true
-    make_cache false
+    make_cache true
     action :create
   end
+elsif node['platform'] =~ /oracle/ && node['platform_version'] =~ /^8/
+    # Deleting because it conflicts with Chef setting up the other repositories and causes errors about the
+  # same repo defined twice.
+  file '/etc/yum.repos.d/oracle-linux-ol8.repo' do
+    action :delete
+  end
+
+  yum_repository 'ol8_addons_latest' do
+    description 'Oracle Linux $releasever Addons Latest ($basearch)'
+    baseurl node['system_core']['repos']['ol8_addons_latest']['url']
+    gpgkey 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle'
+    gpgcheck true
+    make_cache true
+    action :create
+  end
+
+  yum_repository 'ol8_appstream_latest' do
+    description 'Oracle Linux $releasever Appstream Latest ($basearch)'
+    baseurl node['system_core']['repos']['ol8_appstream_latest']['url']
+    gpgkey 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle'
+    gpgcheck true
+    make_cache true
+    action :create
+  end
+
+  # TODO: Allow overriding the baseurl so that local YUM servers can be used.
+  # Only needed for RHEL 7 / Oracle 7 but not CentOS.
+  yum_repository 'ol8_base_latest' do
+    description 'Oracle Linux $releasever Base Latest ($basearch)'
+    baseurl node['system_core']['repos']['ol8_base_latest']['url']
+    gpgkey 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle'
+    gpgcheck true
+    make_cache true
+    action :create
+  end
+
+  yum_repository 'ol8_codeready_latest' do
+    description 'Oracle Linux $releasever CodeReady Latest ($basearch)'
+    baseurl node['system_core']['repos']['ol8_codeready_latest']['url']
+    gpgkey 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle'
+    gpgcheck true
+    make_cache true
+    action :create
+  end
+
+  yum_repository 'ol8_epel_latest' do
+    description 'Oracle Linux $releasever Optional Latest ($basearch)'
+    baseurl node['system_core']['repos']['ol8_epel_latest']['url']
+    gpgkey 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle'
+    gpgcheck true
+    make_cache true
+    action :create
+  end
+else
+  # Include only if not using Oracle Linux >= 7 because the public EPEL repo conflicts
+  # with the other Oracle repos (e.g. the Oracle base repo includes packages that are
+  # also in the public EPEL repo but with different versions.)
+  include_recipe 'yum-epel' if node['platform_family'] == 'rhel'
 end
+
 
 # Install common packages
 node['system_core']['system']['packages'].each do |pkg|
