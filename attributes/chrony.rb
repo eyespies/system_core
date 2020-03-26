@@ -2,7 +2,7 @@ node.default['system_core']['chrony']['type'] = 'client'
 
 # These are not set properly because the Chrony cookbook does not properly support Oracle Linux
 case node['platform']
-when 'redhat', 'centos'
+when 'centos', 'redhat', 'scientific' # ~FC024
   default['chrony']['systemd']['Service']['PIDFile'] = '/run/chrony/chronyd.pid'
   default['chrony']['systemd']['Service']['EnvironmentFile'] = '-/etc/sysconfig/chronyd'
   default['chrony']['systemd']['Service']['ExecStart'] = '/usr/sbin/chronyd'
