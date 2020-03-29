@@ -24,22 +24,23 @@
 # TODO: This should be determined by the platform_family and platform_version
 node.default['system_core']['system']['packages'] = case node['platform_family']
                                                     when 'rhel'
+                                                      # NOTE: For EL8 do not install the IPA client anymore, it
+                                                      # is handled elsewhere
                                                       if node['platform_version'] =~ /^8/
                                                         if node['platform'] =~ /oracle/
                                                           # Note that htop and screen are not available from
                                                           # the Oracle EPEL repo, but using the public repo causes
                                                           # conflicts with the other Oracle repos...
                                                           %w[acpid rsyslog gnutls rsyslog-gnutls vim-enhanced
-                                                             python3-pip git bash-completion tmux
-                                                             gcc ruby-devel zlib-devel ipa-client xfsprogs
-                                                             xfsprogs-devel xfsdump mutt cloud-init sysstat]
+                                                             python3-pip git bash-completion tmux gcc ruby-devel
+                                                             zlib-devel xfsprogs xfsprogs-devel xfsdump mutt
+                                                             cloud-init sysstat]
                                                         else
                                                           # TODO: This needs tested with CentOS / RHEL 8...
                                                           %w[rsyslog gnutls rsyslog-gnutls perl-YAML-LibYAML
-                                                             acpid python3-cheetah vim-enhanced screen git
-                                                             htop bash-completion gcc ruby-devel zlib-devel
-                                                             ipa-client xfsprogs xfsprogs-devel xfsdump
-                                                             tmux mutt cloud-init sysstat]
+                                                             acpid python3-cheetah vim-enhanced screen git htop
+                                                             bash-completion gcc ruby-devel zlib-devel xfsprogs
+                                                             xfsprogs-devel xfsdump tmux mutt cloud-init sysstat]
                                                         end
                                                       else
                                                         %w[rsyslog gnutls rsyslog-gnutls perl-YAML-LibYAML acpid

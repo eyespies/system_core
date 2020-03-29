@@ -1,5 +1,9 @@
 # system_core Cookbook Change Log
 
+## 4.2.1
+
+- Justin Spies - (fix) do not automatically install the IDM client, doing so prevents setup of the IDM server
+
 ## 4.2.0
 
 - Justin Spies - (feature) support OL8 and chrony
