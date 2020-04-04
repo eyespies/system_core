@@ -37,10 +37,10 @@ node.default['system_core']['system']['packages'] = case node['platform_family']
                                                              cloud-init sysstat]
                                                         else
                                                           # TODO: This needs tested with CentOS / RHEL 8...
-                                                          %w[rsyslog gnutls rsyslog-gnutls perl-YAML-LibYAML
-                                                             acpid python3-cheetah vim-enhanced screen git htop
-                                                             bash-completion gcc ruby-devel zlib-devel xfsprogs
-                                                             xfsprogs-devel xfsdump tmux mutt cloud-init sysstat]
+                                                          %w[acpid rsyslog gnutls rsyslog-gnutls vim-enhanced
+                                                             python3-pip git htop bash-completion tmux gcc ruby-devel
+                                                             zlib-devel screen xfsprogs xfsprogs-devel xfsdump mutt
+                                                             cloud-init sysstat]
                                                         end
                                                       else
                                                         %w[rsyslog gnutls rsyslog-gnutls perl-YAML-LibYAML acpid

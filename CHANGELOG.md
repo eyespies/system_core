@@ -1,5 +1,9 @@
 # system_core Cookbook Change Log
 
+## 4.2.2
+
+- Justin Spies - (fix) use correct CentOS / RHEL packages
+
 ## 4.2.1
 
 - Justin Spies - (fix) do not automatically install the IDM client, doing so prevents setup of the IDM server
