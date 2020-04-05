@@ -3,6 +3,7 @@
 ## 4.2.2
 
 - Justin Spies - (fix) use correct CentOS / RHEL packages
+- Justin Spies - (fix) set customizations for SSH on EL8
 
 ## 4.2.1
 
