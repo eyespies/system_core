@@ -1,5 +1,9 @@
 # system_core Cookbook Change Log
 
+## 4.2.3
+
+- Justin Spies - (fix) set AuthorizedKeysCommandUser for EL8 as well as EL7
+
 ## 4.2.2
 
 - Justin Spies - (fix) use correct CentOS / RHEL packages
