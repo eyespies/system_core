@@ -1,5 +1,9 @@
 # system_core Cookbook Change Log
 
+## 4.3.0
+
+- Justin Spies - (feature) update to ruby_rbenv 2.4.0 from 2.3.x
+
 ## 4.2.3
 
 - Justin Spies - (fix) set AuthorizedKeysCommandUser for EL8 as well as EL7

@@ -6,7 +6,7 @@ issues_url       'https://github.com/eyespies/system_core/issues'
 license          'Apache-2.0'
 description      'Core operating system configuration for Enterprise Linux'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '4.2.3'
+version          '4.3.0'
 chef_version     '>= 12'
 
 depends 'apt', '~> 7.2.0'
@@ -21,7 +21,7 @@ depends 'logrotate', '~> 2.2.0'
 depends 'ntp', '~> 3.7.0'
 depends 'openssh', '~> 2.8.0'
 depends 'postfix', '~> 5.3.0'
-depends 'ruby_rbenv', '~> 2.3.0'
+depends 'ruby_rbenv', '~> 2.4.0'
 depends 'rsyslog', '~> 7.0.0'
 # TODO: Switch to aws cookbook
 depends 's3_file', '~> 2.8.0'
