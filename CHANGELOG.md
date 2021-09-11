@@ -1,5 +1,11 @@
 # system_core Cookbook Change Log
 
+## 5.0.0 (2021-09-11)
+
+### Changed
+
+- Justin Spies - (breaking) use Oracle EPEL not general EPEL on Oracle Linux
+
 ## 4.4.0 (2020-11-12)
 
 ### Changed
