@@ -33,8 +33,9 @@ if node['platform'] =~ /oracle/ && node['platform_version'] =~ /^7/
     action :delete
   end
 
-  # OL 7 ; this should not run for OL 8; for other EL platforms, see the bottom of the "if node ..."
-  include_recipe 'yum-epel'
+  file '/etc/yum.repos.d/oracle-linux-ol7.repo' do
+    action :delete
+  end
 
   # TODO: Allow overriding the baseurl so that local YUM servers can be used.
   # Only needed for RHEL 7 / Oracle 7 but not CentOS.
@@ -71,6 +72,15 @@ if node['platform'] =~ /oracle/ && node['platform_version'] =~ /^7/
   yum_repository 'ol7_optional_latest' do
     description 'Oracle Linux $releasever Optional Latest ($basearch)'
     baseurl node['system_core']['repos']['ol7_optional_latest']['url']
+    gpgkey 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle'
+    gpgcheck true
+    make_cache true
+    action :create
+  end
+
+  yum_repository 'ol7_epel_latest' do
+    description 'Oracle Linux $releasever Optional Latest ($basearch)'
+    baseurl node['system_core']['repos']['ol7_epel_latest']['url']
     gpgkey 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle'
     gpgcheck true
     make_cache true

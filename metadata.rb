@@ -6,8 +6,8 @@ issues_url       'https://github.com/eyespies/system_core/issues'
 license          'Apache-2.0'
 description      'Core operating system configuration for Enterprise Linux'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '4.4.0'
-chef_version     '>= 12'
+version          '5.0.0'
+chef_version     '>= 15'
 
 depends 'apt', '~> 7.2.0'
 depends 'chrony', '~> 0.3.0'
