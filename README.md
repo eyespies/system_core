@@ -29,7 +29,6 @@ essentially just a wrapper around those cookbooks.
 - ssh_known_hosts
 - sudo
 - yum
-- yum-epel
 
 ### packages
 
