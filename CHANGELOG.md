@@ -4,7 +4,7 @@
 
 ### Changed
 
-- Justin Spies - (breaking) use Oracle EPEL not general EPEL on Oracle Linux
+- Justin Spies - (breaking) remove old / unnecessary use of yum-epel
 
 ## 4.4.0 (2020-11-12)
 
