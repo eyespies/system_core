@@ -29,7 +29,7 @@ depends 'selinux', '~> 3.0.0'
 depends 'ssh_authorized_keys', '~> 0.4.0'
 depends 'ssh_known_hosts', '~> 5.2.0'
 depends 'sudo', '~> 5.4.0'
-depends 'yum', '~> 5.1.0'
+# depends 'yum', '~> 7.1.0'
 
 supports 'ubuntu', '>= 16.04'
 supports 'centos', '>= 6.0'
