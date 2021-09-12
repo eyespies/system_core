@@ -18,7 +18,7 @@
 #
 
 # Used to install various outside packages
-include_recipe 'yum' if node['platform_family'] == 'rhel'
+# include_recipe 'yum' if node['platform_family'] == 'rhel'
 include_recipe 'apt::default' if node['platform_family'] == 'debian'
 
 # Avoid caching something we don't need cached.
@@ -139,11 +139,6 @@ elsif node['platform'] =~ /oracle/ && node['platform_version'] =~ /^8/
     make_cache true
     action :create
   end
-# elsif node['platform_family'] == 'rhel'
-  # Include only if not using Oracle Linux >= 7 because the public EPEL repo conflicts
-  # with the other Oracle repos (e.g. the Oracle base repo includes packages that are
-  # also in the public EPEL repo but with different versions.)
-  # include_recipe 'yum-epel'
 end
 
 # Install common packages
