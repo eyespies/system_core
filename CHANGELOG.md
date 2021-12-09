@@ -1,5 +1,13 @@
 # system_core Cookbook Change Log
 
+## 6.0.0 (2021-12-08)
+
+### Breaking
+
+- Remove support for Chef 14 and EL6 platforms
+- Upgrade to Ruby 3 from 2.6
+- Include additional Oracle YUM repos defaulting to disabled
+
 ## 5.0.0 (2021-09-11)
 
 ### Changed

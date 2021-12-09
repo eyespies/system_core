@@ -2,7 +2,7 @@
 # Cookbook :: system_core
 # Attributes :: ruby
 #
-# Copyright (C) 2016 - 2020 Justin Spies
+# Copyright (C) 2016 - 2021 Justin Spies
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,5 +18,5 @@
 #
 
 # ~ ruby ~ #
-node.default['system_core']['ruby']['global']  = '2.6.5'
+node.default['system_core']['ruby']['global']  = '3.0.3'
 node.default['system_core']['ruby']['gems']    = %w[bundler]

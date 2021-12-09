@@ -2,7 +2,7 @@
 # Cookbook :: system_core
 # Attributes :: ssh
 #
-# Copyright (C) 2016 - 2020 Justin Spies
+# Copyright (C) 2016 - 2021 Justin Spies
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,8 +36,8 @@ node.default['system_core']['ssh']['user_config']['root']['config']['hosts']['*'
   config['StrictHostKeyChecking'] = 'no'
 end
 
-node.default['system_core']['ssh']['user_config']['root']['config']['hosts']['github.com bitbucket.org bitbucket.com'].tap do |config|
-  config['IdentityFile'] = '~/.ssh/id_rsa'
-  config['UserKnownHostsFile'] = '~/.ssh/known_hosts'
-  config['StrictHostKeyChecking'] = 'yes'
-end
+# node.default['system_core']['ssh']['user_config']['root']['config']['hosts']['github.com bitbucket.org bitbucket.com'].tap do |config|
+#   config['IdentityFile'] = '~/.ssh/id_rsa'
+#   config['UserKnownHostsFile'] = '~/.ssh/known_hosts'
+#   config['StrictHostKeyChecking'] = 'yes'
+# end

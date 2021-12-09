@@ -2,14 +2,10 @@
 def platforms
   {
     'ubuntu' => {
-      'versions' => ['16.04', '18.04']
-    },
-    'centos' => {
-      # CentOS versions don't 100% match those from Oracle Linux
-      'versions' => ['6.10', '7.7.1908', '8']
+      'versions' => ['18.04', '20.04']
     },
     'oracle' => {
-      'versions' => ['6.10', '7.6']
+      'versions' => ['7.6', '8.2']
     }
   }
 end
