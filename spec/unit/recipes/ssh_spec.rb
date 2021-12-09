@@ -7,7 +7,6 @@ describe 'system_core::ssh' do
       context "On #{platform} #{version}" do
         before do
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('openssh')
-          allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('sudo')
         end
 
         cached(:chef_run) do
@@ -18,15 +17,12 @@ describe 'system_core::ssh' do
 
         it 'should include the necessary dependent recipes' do
           expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('openssh')
-          expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('sudo')
-
           chef_run
         end
 
         it 'should create the SSH banner' do
           expect(chef_run).to create_template('/etc/ssh/banner')
           expect(chef_run).to_not create_group('sshusers')
-          expect(chef_run).to_not create_group('sudoers')
         end
       end
     end

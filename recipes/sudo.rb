@@ -16,16 +16,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-include_recipe 'openssh'
+package 'sudo'
 
-template '/etc/ssh/banner' do
-  source node['system_core']['ssh']['banner']['source_file']
-  cookbook node['system_core']['ssh']['banner']['source_cookbook'] if node['system_core']['ssh']['banner'].attribute?('source_cookbook')
-  owner 'root'
-  group 'root'
-  mode '0664'
-  variables(
-    # TODO: Replace this with the Chef environment value
-    environment: node.attribute['environment']
-  )
+sudo 'global_sudo' do
+  defaults               node['system_core']['sudo']['sudoers_defaults']
+  groups                 node['system_core']['sudo']['groups']
+  nopasswd               node['system_core']['sudo']['passwordless']
 end

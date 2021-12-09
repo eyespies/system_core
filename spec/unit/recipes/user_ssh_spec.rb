@@ -20,10 +20,6 @@ describe 'system_core::user_ssh' do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.default['environment'] = 'dev'
 
-          # Must use node.override
-          runner.node.override['system_core']['aws']['profiles']['default']['access_key'] = 'AKIASOMETHINGFAKE'
-          runner.node.override['system_core']['aws']['profiles']['default']['secret_key'] = 'thisismyreallylongawssectaccesskey'
-
           runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Metrics/LineLength
           runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['user'] = 'root'
 
@@ -52,11 +48,6 @@ describe 'system_core::user_ssh' do
         it 'should create the user specific SSH configuration file' do
           expect(chef_run).to create_template('/root/.ssh/config')
         end
-
-        it 'should NOT create the SSH public/private key files' do
-          expect(chef_run).to_not create_s3_file('/root/.ssh/id_rsa-chef-solo')
-          expect(chef_run).to_not create_s3_file('/root/.ssh/id_rsa-chef-solo.pub')
-        end
       end
 
       context "On #{platform} #{version}, with custom SSH keys for a user" do
@@ -69,10 +60,6 @@ describe 'system_core::user_ssh' do
         let(:chef_run) do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.default['environment'] = 'dev'
-
-          # Must use node.override
-          runner.node.override['system_core']['aws']['profiles']['default']['access_key'] = 'AKIASOMETHINGFAKE'
-          runner.node.override['system_core']['aws']['profiles']['default']['secret_key'] = 'thisismyreallylongawssectaccesskey'
 
           runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Metrics/LineLength
           runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['user'] = 'root'
@@ -90,11 +77,6 @@ describe 'system_core::user_ssh' do
         it 'should configure the SSH authorized keys' do
           expect_any_instance_of(Chef::Recipe).to receive(:ssh_authorize_key)
           chef_run
-        end
-
-        it 'should create the SSH public/private key files' do
-          expect(chef_run).to create_s3_file('/root/.ssh/id_rsa-chef-solo')
-          expect(chef_run).to create_s3_file('/root/.ssh/id_rsa-chef-solo.pub')
         end
       end
 
@@ -126,10 +108,6 @@ describe 'system_core::user_ssh' do
         it 'should configure the SSH authorized keys' do
           expect_any_instance_of(Chef::Recipe).to receive(:ssh_authorize_key)
           chef_run
-        end
-        it 'should NOT create the SSH public/private key files' do
-          expect(chef_run).to_not create_s3_file('/root/.ssh/id_rsa-chef-solo')
-          expect(chef_run).to_not create_s3_file('/root/.ssh/id_rsa-chef-solo.pub')
         end
       end
     end

@@ -18,11 +18,10 @@
 #
 
 # ~ sudoers ~ #
-node.default['authorization']['sudo']['groups']            = ['sudoers']
-node.default['authorization']['sudo']['passwordless']      = 'true'
-node.default['authorization']['sudo']['include_sudoers_d'] = 'true'
+node.default['system_core']['sudo']['groups']            = ['sudoers']
+node.default['system_core']['sudo']['passwordless']      = true
 
-default['authorization']['sudo']['sudoers_defaults'] = [
+default['system_core']['sudo']['sudoers_defaults'] = [
   '!visiblepw',
   '!requiretty',
   'env_reset',
@@ -35,8 +34,8 @@ default['authorization']['sudo']['sudoers_defaults'] = [
   'always_set_home'
 ]
 
-default['authorization']['sudo']['sudoers_defaults'] << if node['platform_family'] == 'debian'
-                                                          'secure_path = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"'
-                                                        else
-                                                          'secure_path = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"'
-                                                        end
+default['system_core']['sudo']['sudoers_defaults'] << if node['platform_family'] == 'debian'
+                                                        'secure_path = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"'
+                                                      else
+                                                        'secure_path = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"'
+                                                      end
