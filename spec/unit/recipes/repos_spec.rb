@@ -7,26 +7,24 @@ describe 'system_core::repos' do
                  ol7_uek5_latest
                  ol7_uek6_latest
                  ol7_optional_latest
-                 ol7_epel_latest
-                ]
-                 # ol7_kvm_utilities_latest
-                 # ol7_ovirt43_latest
-                 # ol7_ovirt43_extras_latest
-                 # ol7_gluster6_latest
-                 # ol7_gluster8_latest
-                 # ol7_php_latest
+                 ol7_epel_latest]
+  # ol7_kvm_utilities_latest
+  # ol7_ovirt43_latest
+  # ol7_ovirt43_extras_latest
+  # ol7_gluster6_latest
+  # ol7_gluster8_latest
+  # ol7_php_latest
 
   ol8_repos = %w[ol8_addons_latest
                  ol8_appstream_latest
                  ol8_base_latest
-                 ol8_codeready_latest
                  ol8_epel_latest
-                 ol8_uek6_latest
-                ]
-                #  ol8_kvm_appstream_latest
-                #  ol8_automation_manager_latest
-                #  ol8_gluster_appstream_latest
-  
+                 ol8_uek6_latest]
+  #  ol8_codeready_latest
+  #  ol8_kvm_appstream_latest
+  #  ol8_automation_manager_latest
+  #  ol8_gluster_appstream_latest
+
   # Used by Fauxhai to retrieve configuration details that are feed into ChefSpec; these correspond
   # to specific URLs that must exist
   platforms.each do |platform, details|

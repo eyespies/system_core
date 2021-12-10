@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'system_core::default' do
   let(:recipes) do
-    %w[hostname]
+    %w(hostname)
   end
 
   platforms.each do |platform, details|

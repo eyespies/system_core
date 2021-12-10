@@ -2,7 +2,7 @@
 # Cookbook Name:: system_core
 # Recipe:: repos
 #
-# Copyright (C) 2016 - 2021 Justin Spies
+# Copyright:: (C) 2016 - 2021 Justin Spies
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,6 +33,14 @@ if node['platform'] =~ /oracle/ && node['platform_version'] =~ /^7/
   end
 
   file '/etc/yum.repos.d/oracle-linux-ol7.repo' do
+    action :delete
+  end
+
+  file '/etc/yum.repos.d/uek-ol7.repo' do
+    action :delete
+  end
+
+  file '/etc/yum.repos.d/virt-ol7.repo' do
     action :delete
   end
 

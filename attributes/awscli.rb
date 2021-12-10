@@ -2,7 +2,7 @@
 # Cookbook :: system_core
 # Attributes :: aws
 #
-# Copyright (C) 2016 - 2021 Justin Spies
+# Copyright:: (C) 2016 - 2021 Justin Spies
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,11 +21,11 @@
 node.default['system_core']['awscli']['version'] = '1.4.4'
 node.default['system_core']['awscli']['packages'] = case node['platform_family']
                                                     when 'rhel'
-                                                      %w[jq wget curl unzip]
+                                                      %w(jq wget curl unzip)
                                                     when 'debian'
                                                       # Require Markdown on Ubuntu, otherwise we get
                                                       # cheetah 2.4.4 requires Markdown>=2.0.1, which is not installed.
-                                                      %w[jq wget curl unzip python-pip python-markdown python3-pip python3-markdown]
+                                                      %w(jq wget curl unzip python-pip python-markdown python3-pip python3-markdown)
                                                     end
 
 # Defines the attribute with no value so that we can use a shorter 'node['system_core']['aws'].attribute?('profiles')' test

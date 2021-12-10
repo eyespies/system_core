@@ -2,7 +2,7 @@
 # Cookbook Name:: system_core
 # Recipe:: auditd
 #
-# Copyright (C) 2016 - 2021 Justin Spies
+# Copyright:: (C) 2016 - 2021 Justin Spies
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 # limitations under the License.
 auditd_packages = case node['platform_family']
                   when 'rhel'
-                    %w[audit audit-libs]
+                    %w(audit audit-libs)
                   when 'debian'
-                    %w[auditd audispd-plugins]
+                    %w(auditd audispd-plugins)
                   end
 
 package 'auditd' do
