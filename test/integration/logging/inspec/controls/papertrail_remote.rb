@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-papertrail_host = attribute('papertrail_host',
-                            default: nil,
-                            description: 'Hostname to be compared when testing that papertrail is properly configured')
+papertrail_host = input('papertrail_host',
+                        value: nil,
+                        description: 'Hostname to be compared when testing that papertrail is properly configured')
 
 control 'remote-syslog' do
   impact 1.0

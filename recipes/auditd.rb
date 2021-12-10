@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: system_core
+# Cookbook:: system_core
 # Recipe:: auditd
 #
 # Copyright:: (C) 2016 - 2021 Justin Spies
@@ -35,7 +35,7 @@ cookbook_file '/etc/audit/auditd.conf' do
 end
 
 service 'auditd' do
-  restart_command '/usr/libexec/initscripts/legacy-actions/auditd/restart' if platform_family?('rhel') && node['init_package'] == 'systemd'
+  restart_command '/usr/libexec/initscripts/legacy-actions/auditd/restart' if platform_family?('rhel') && systemd?
   supports [:start, :stop, :restart, :reload, :status]
   action :nothing
 end

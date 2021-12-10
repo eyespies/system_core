@@ -4,16 +4,16 @@ describe 'system_core::papertrail' do
   packages = {
     'ubuntu' => {
       'gnutls-package' => 'rsyslog-gnutls',
-      'rsyslog-service' => 'rsyslog'
+      'rsyslog-service' => 'rsyslog',
     },
     'centos' => {
       'gnutls-package' => 'rsyslog-gnutls',
-      'rsyslog-service' => 'rsyslog'
+      'rsyslog-service' => 'rsyslog',
     },
     'oracle' => {
       'gnutls-package' => 'rsyslog-gnutls',
-      'rsyslog-service' => 'rsyslog'
-    }
+      'rsyslog-service' => 'rsyslog',
+    },
   }
 
   # Used by Fauxhai to retrieve configuration details that are feed into ChefSpec; these correspond to

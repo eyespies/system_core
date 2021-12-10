@@ -1,5 +1,5 @@
 #
-# Cookbook :: system_core
+# Cookbook:: system_core
 # Attributes :: ntp
 #
 # Copyright:: (C) 2016 - 2021 Justin Spies

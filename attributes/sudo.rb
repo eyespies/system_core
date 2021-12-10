@@ -1,5 +1,5 @@
 #
-# Cookbook :: system_core
+# Cookbook:: system_core
 # Attributes :: sudo
 #
 # Copyright:: (C) 2016 - 2021 Justin Spies
@@ -31,10 +31,10 @@ default['system_core']['sudo']['sudoers_defaults'] = [
   'env_keep += "LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE"',
   'env_keep += "LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY"',
   'env_keep += "HOME"',
-  'always_set_home'
+  'always_set_home',
 ]
 
-default['system_core']['sudo']['sudoers_defaults'] << if node['platform_family'] == 'debian'
+default['system_core']['sudo']['sudoers_defaults'] << if platform_family?('debian')
                                                         'secure_path = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"'
                                                       else
                                                         'secure_path = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"'

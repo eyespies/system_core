@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: system_core
+# Cookbook:: system_core
 # Recipe:: user_ssh_config
 #
 # Copyright:: (C) 2016 - 2021 Justin Spies
@@ -26,13 +26,13 @@ if node['system_core']['ssh'].attribute?('user_config')
     directory user_home do
       owner usr
       group usr
-      mode 0o0755
+      mode "0755"
     end
 
     directory "#{user_home}/.ssh" do
       owner usr
       group usr
-      mode 0o0700
+      mode "0700"
     end
 
     if node['system_core']['ssh'].attribute?('authorized_keys') && !node['system_core']['ssh']['authorized_keys'].empty?
@@ -50,7 +50,7 @@ if node['system_core']['ssh'].attribute?('user_config')
         source 'ssh_config.erb'
         owner 'root'
         group 'root'
-        mode 0o0600
+        mode "0600"
         # AFIAK the braces are required for Chef DSL...
         variables({ hosts: opts['config']['hosts'] }) # rubocop:disable Style/BracesAroundHashParameters
       end

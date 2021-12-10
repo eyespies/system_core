@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: system_core
+# Cookbook:: system_core
 # Recipe:: hostname
 #
 # Copyright:: (C) 2016 - 2021 Justin Spies
@@ -19,14 +19,14 @@
 
 # If the node name already has the domain component included, then use the node name itself; otherwise
 # use the domain.
-node.normal['set_fqdn'] = if Chef::Config[:node_name] =~ /#{node['system_core']['domain']}$/i
-                            Chef::Config[:node_name]
-                          else
-                            "*.#{node['system_core']['domain']}"
-                          end
+node.override['set_fqdn'] = if Chef::Config[:node_name] =~ /#{node['system_core']['domain']}$/i
+                              Chef::Config[:node_name]
+                            else
+                              "*.#{node['system_core']['domain']}"
+                            end
 
 # The default is 127.0.1.1, which is used under Debian, not RHEL based systems.
-node.normal['hostname_cookbook']['hostsfile_ip'] = '127.0.0.1'
+node.override['hostname_cookbook']['hostsfile_ip'] = '127.0.0.1'
 
 # Without the next line, the 'hostname' cookbook sets:
 #  -127.0.0.1 full-oracle-73.example.com full-oracle-73
@@ -37,5 +37,5 @@ node.normal['hostname_cookbook']['hostsfile_ip'] = '127.0.0.1'
 #  +127.0.0.1 full-oracle-73.example.com full-oracle-73
 #
 # If using a real IP for the hostfile_ip attribute, then this should not be used.
-node.normal['hostname_cookbook']['hostsfile_aliases'] = ['localhost']
+node.override['hostname_cookbook']['hostsfile_aliases'] = ['localhost']
 include_recipe 'hostname'

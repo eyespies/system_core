@@ -1,5 +1,5 @@
 #
-# Cookbook :: system_core
+# Cookbook:: system_core
 # Attributes :: repos
 #
 # Copyright:: (C) 2016 - 2021 Justin Spies
@@ -47,7 +47,7 @@ node.default['system_core']['repos']['ol7']['epel_latest']['url']     = 'https:/
 
 node.default['system_core']['repos']['ol7']['addons_latest']['name'] = 'ol7_addons_latest'
 node.default['system_core']['repos']['ol7']['addons_latest']['enabled'] = true
-node.default['system_core']['repos']['ol7']['addons_latest']['url']  = 'https://yum.oracle.com/repo/OracleLinux/OL7/addons/$basearch/'
+node.default['system_core']['repos']['ol7']['addons_latest']['url'] = 'https://yum.oracle.com/repo/OracleLinux/OL7/addons/$basearch/'
 
 node.default['system_core']['repos']['ol7']['kvm_utilities_latest']['name']    = 'ol7_kvm_utilities_latest'
 node.default['system_core']['repos']['ol7']['kvm_utilities_latest']['enabled'] = false
@@ -55,11 +55,11 @@ node.default['system_core']['repos']['ol7']['kvm_utilities_latest']['url']     =
 
 node.default['system_core']['repos']['ol7']['ovirt43_latest']['name'] = 'ol7_ovirt43_latest'
 node.default['system_core']['repos']['ol7']['ovirt43_latest']['enabled'] = false
-node.default['system_core']['repos']['ol7']['ovirt43_latest']['url']  = 'https://yum.oracle.com/repo/OracleLinux/OL7/ovirt43/$basearch/'
+node.default['system_core']['repos']['ol7']['ovirt43_latest']['url'] = 'https://yum.oracle.com/repo/OracleLinux/OL7/ovirt43/$basearch/'
 
 node.default['system_core']['repos']['ol7']['ovirt43_extras_latest']['name'] = 'ol7_ovirt43_extras_latest'
 node.default['system_core']['repos']['ol7']['ovirt43_extras_latest']['enabled'] = false
-node.default['system_core']['repos']['ol7']['ovirt43_extras_latest']['url']  = 'https://yum.oracle.com/repo/OracleLinux/OL7/ovirt43/extras/$basearch/'
+node.default['system_core']['repos']['ol7']['ovirt43_extras_latest']['url'] = 'https://yum.oracle.com/repo/OracleLinux/OL7/ovirt43/extras/$basearch/'
 
 node.default['system_core']['repos']['ol7']['gluster6_latest']['name'] = 'ol7_gluster6_latest'
 node.default['system_core']['repos']['ol7']['gluster6_latest']['enabled'] = false
@@ -67,11 +67,11 @@ node.default['system_core']['repos']['ol7']['gluster6_latest']['url']  = 'https:
 
 node.default['system_core']['repos']['ol7']['gluster8_latest']['name'] = 'ol7_gluster8_latest'
 node.default['system_core']['repos']['ol7']['gluster8_latest']['enabled'] = false
-node.default['system_core']['repos']['ol7']['gluster8_latest']['url']  = 'https://yum.oracle.com/repo/OracleLinux/OL7/gluster8/$basearch/'
+node.default['system_core']['repos']['ol7']['gluster8_latest']['url'] = 'https://yum.oracle.com/repo/OracleLinux/OL7/gluster8/$basearch/'
 
 node.default['system_core']['repos']['ol7']['php_latest']['name'] = 'ol7_php_latest'
 node.default['system_core']['repos']['ol7']['php_latest']['enabled'] = false
-node.default['system_core']['repos']['ol7']['php_latest']['url']  = 'https://yum.oracle.com/repo/OracleLinux/OL7/developer/php74/$basearch/'
+node.default['system_core']['repos']['ol7']['php_latest']['url'] = 'https://yum.oracle.com/repo/OracleLinux/OL7/developer/php74/$basearch/'
 
 # Oracle Linux 8
 node.default['system_core']['repos']['ol8']['base_latest']['name']    = 'ol8_base_latest'

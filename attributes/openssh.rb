@@ -1,5 +1,5 @@
 #
-# Cookbook :: system_core
+# Cookbook:: system_core
 # Attributes :: openssh
 #
 # Copyright:: (C) 2016 - 2021 Justin Spies
@@ -19,8 +19,7 @@
 require 'mixlib/shellout'
 
 # ~ openssh ~ #
-case node['platform_family']
-when 'rhel'
+if platform_family?('rhel')
   if node['platform_version'].to_i < 7
     node.override['openssh']['server']['HostKey'] = '/etc/ssh/ssh_host_dsa_key'
   elsif node['platform_version'].to_i >= 7
@@ -69,33 +68,31 @@ accept_env = 'LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY'
 accept_env = "#{accept_env} LC_MESSAGES LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT"
 accept_env += ' LC_IDENTIFICATION LC_ALL LANGUAGE XMODIFIERS'
 
-ciphers = case node['platform_family']
-          when 'rhel'
+ciphers = if platform_family?('rhel')
             if node['platform_version'] =~ /^6/
-              %w[aes128-ctr
+              %w(aes128-ctr
                  aes192-ctr
-                 aes256-ctr]
+                 aes256-ctr)
             elsif node['platform_version'] =~ /^[78]/
-              %w[chacha20-poly1305@openssh.com
+              %w(chacha20-poly1305@openssh.com
                  aes128-ctr
                  aes192-ctr
                  aes256-ctr
                  aes128-gcm@openssh.com
-                 aes256-gcm@openssh.com]
+                 aes256-gcm@openssh.com)
             end
           end
 
-macs = case node['platform_family']
-       when 'rhel'
+macs = if platform_family?('rhel')
          if node['platform_version'] =~ /^6/
-           %w[hmac-sha1
+           %w(hmac-sha1
               umac-64@openssh.com
               hmac-ripemd160
               hmac-sha2-256
               hmac-sha2-512
-              hmac-ripemd160@openssh.com]
+              hmac-ripemd160@openssh.com)
          elsif node['platform_version'] =~ /^[78]/
-           %w[umac-64-etm@openssh.com
+           %w(umac-64-etm@openssh.com
               umac-128-etm@openssh.com
               hmac-sha2-256-etm@openssh.com
               hmac-sha2-512-etm@openssh.com
@@ -105,7 +102,7 @@ macs = case node['platform_family']
               hmac-sha2-256
               hmac-sha2-512
               hmac-sha1
-              hmac-sha1-etm@openssh.com]
+              hmac-sha1-etm@openssh.com)
          end
        end
 
@@ -126,7 +123,7 @@ node.override['openssh']['server']['x11_forwarding']                    = 'no'
 node.override['openssh']['server']['ciphers'] = ciphers.join(',') unless ciphers.nil?
 node.override['openssh']['server']['mACs']    = macs.join(',') unless macs.nil?
 
-if node['platform_family'] == 'rhel' && node['platform_version'].to_i >= 8
+if platform_family?('rhel') && node['platform_version'].to_i >= 8
   node.override['openssh']['server']['use_d_n_s']                    = 'yes'
   node.override['openssh']['server']['print_motd']                   = 'yes'
   node.override['openssh']['server']['g_s_s_a_p_i_authentication']        = 'no'
@@ -137,8 +134,7 @@ if File.exist?('/usr/bin/sss_ssh_authorizedkeys') && File.exist?('/etc/ipa/ca.cr
   # Override the default SSH settings - these are required in order to enable use of SSH keys stored in IPA
   node.override['openssh']['server']['authorized_keys_command'] = '/usr/bin/sss_ssh_authorizedkeys'
 
-  case node['platform_family']
-  when 'rhel'
+  if platform_family?('rhel')
     if node['platform_version'].to_i >= 7
       node.override['openssh']['server']['authorized_keys_command_user'] = 'nobody'
     elsif node['platform_version'].to_i >= 8

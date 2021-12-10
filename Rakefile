@@ -1,24 +1,23 @@
 # encoding: utf-8
 
-require 'foodcritic'
+require 'cookstyle/rake_task'
 require 'rspec/core/rake_task'
-require 'rubocop/rake_task'
 require 'base64'
 require 'chef/cookbook/metadata'
 
 # General tasks
 
-# Rubocop before rspec so we don't lint vendored cookbooks
+# Cookstyle before rspec so we don't lint vendored cookbooks
 desc 'Run all tests except Kitchen (default task)'
-task default: %i[lint spec]
+task default: %i(lint spec)
 
 # Lint the cookbook
-desc 'Run all linters: rubocop and foodcritic'
-task lint: %i[rubocop foodcritic]
+desc 'Run all linters: cookstyle'
+task lint: %i(cookstyle)
 
 # Run the whole shebang
 desc 'Run all tests'
-task test: %i[lint kitchen spec]
+task test: %i(lint kitchen spec)
 
 # RSpec
 desc 'Run chefspec tests'
@@ -27,20 +26,10 @@ task :spec do
   RSpec::Core::RakeTask.new(:spec)
 end
 
-# Foodcritic
-desc 'Run foodcritic lint checks'
-task :foodcritic do
-  puts 'Running Foodcritic tests...'
-  FoodCritic::Rake::LintTask.new do |t|
-    t.options = { fail_tags: ['any'] }
-    puts 'done.'
-  end
-end
-
 # Rubocop
-desc 'Run Rubocop lint checks'
-task :rubocop do
-  RuboCop::RakeTask.new
+desc 'Run Cookstyle lint checks'
+task :cookstyle do
+  Cookstyle::RakeTask.new
 end
 
 # Automatically generate a changelog for this project. Only loaded if

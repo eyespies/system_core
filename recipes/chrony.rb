@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: system_core
+# Cookbook:: system_core
 # Recipe:: chrony
 #
 # Copyright:: (C) 2020 Justin Spies

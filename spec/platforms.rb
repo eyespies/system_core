@@ -2,10 +2,10 @@
 def platforms
   {
     'ubuntu' => {
-      'versions' => ['18.04', '20.04']
+      'versions' => ['18.04', '20.04'],
     },
     'oracle' => {
-      'versions' => ['7.6', '8.2']
-    }
+      'versions' => ['7.6', '8.2'],
+    },
   }
 end

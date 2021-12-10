@@ -1,5 +1,5 @@
 #
-# Cookbook :: system_core
+# Cookbook:: system_core
 # Attributes :: ssh
 #
 # Copyright:: (C) 2016 - 2021 Justin Spies
@@ -31,7 +31,7 @@ node.override['ssh_known_hosts']['cacher']['data_bag_item'] = 'known_hosts'
 node.default['system_core']['ssh']['user_config']['root']['config']['hosts']['*'].tap do |config|
   config['SendEnv'] = 'LANG LC_*'
   config['ForwardAgent'] = 'yes'
-  config['HostkeyAlgorithms'] = '+ssh-ed25519,ssh-rsa,ssh-dss,ecdsa-sha2-nistp256' if node['platform_family'] == 'rhel' && node['platform_version'] =~ /^7/
+  config['HostkeyAlgorithms'] = '+ssh-ed25519,ssh-rsa,ssh-dss,ecdsa-sha2-nistp256' if platform_family?('rhel') && node['platform_version'] =~ /^7/
   config['UserKnownHostsFile'] = '/dev/null'
   config['StrictHostKeyChecking'] = 'no'
 end

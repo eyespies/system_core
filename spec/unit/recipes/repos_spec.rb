@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe 'system_core::repos' do
-  ol7_repos = %w[ol7_base_latest
+  ol7_repos = %w(ol7_base_latest
                  ol7_addons_latest
                  ol7_uek4_latest
                  ol7_uek5_latest
                  ol7_uek6_latest
                  ol7_optional_latest
-                 ol7_epel_latest]
+                 ol7_epel_latest)
   # ol7_kvm_utilities_latest
   # ol7_ovirt43_latest
   # ol7_ovirt43_extras_latest
@@ -15,11 +15,11 @@ describe 'system_core::repos' do
   # ol7_gluster8_latest
   # ol7_php_latest
 
-  ol8_repos = %w[ol8_addons_latest
+  ol8_repos = %w(ol8_addons_latest
                  ol8_appstream_latest
                  ol8_base_latest
                  ol8_epel_latest
-                 ol8_uek6_latest]
+                 ol8_uek6_latest)
   #  ol8_codeready_latest
   #  ol8_kvm_appstream_latest
   #  ol8_automation_manager_latest

@@ -20,7 +20,7 @@ describe 'system_core::user_ssh' do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.default['environment'] = 'dev'
 
-          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Metrics/LineLength
+          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Layout/LineLength
           runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['user'] = 'root'
 
           runner.node.default['system_core']['ssh']['user_config']['root']['config']['hosts']['*']['SendEnv'] = 'LANG LC_*'
@@ -61,7 +61,7 @@ describe 'system_core::user_ssh' do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.default['environment'] = 'dev'
 
-          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Metrics/LineLength
+          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Layout/LineLength
           runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['user'] = 'root'
 
           runner.node.default['system_core']['ssh']['user_config']['root']['keys']['id_rsa-chef-solo']['owner'] = 'root'
@@ -91,7 +91,7 @@ describe 'system_core::user_ssh' do
           runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
           runner.node.default['environment'] = 'dev'
 
-          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Metrics/LineLength
+          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Layout/LineLength
           runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['user'] = 'root'
 
           runner.node.default['system_core']['ssh']['user_config']['root']['keys']['id_rsa-chef-solo']['owner'] = 'root'

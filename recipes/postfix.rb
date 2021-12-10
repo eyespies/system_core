@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: system_core
+# Cookbook:: system_core
 # Recipe:: postfix
 #
 # Copyright:: (C) 2016 - 2021 Justin Spies

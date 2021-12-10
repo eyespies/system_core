@@ -1,5 +1,5 @@
 #
-# Cookbook :: system_core
+# Cookbook:: system_core
 # Attributes :: default
 #
 # Copyright:: (C) 2016 - 2021 Justin Spies
@@ -31,30 +31,30 @@ node.default['system_core']['system']['packages'] = case node['platform_family']
                                                           # Note that htop and screen are not available from
                                                           # the Oracle EPEL repo, but using the public repo causes
                                                           # conflicts with the other Oracle repos...
-                                                          %w[acpid rsyslog gnutls rsyslog-gnutls vim-enhanced
+                                                          %w(acpid rsyslog gnutls rsyslog-gnutls vim-enhanced
                                                              python3-pip git bash-completion tmux gcc ruby-devel
                                                              zlib-devel xfsprogs xfsprogs-devel xfsdump mutt
-                                                             cloud-init sysstat]
+                                                             cloud-init sysstat)
                                                         else
                                                           # TODO: This needs tested with CentOS / RHEL 8...
-                                                          %w[acpid rsyslog gnutls rsyslog-gnutls vim-enhanced
+                                                          %w(acpid rsyslog gnutls rsyslog-gnutls vim-enhanced
                                                              python3-pip git htop bash-completion tmux gcc ruby-devel
                                                              zlib-devel screen xfsprogs xfsprogs-devel xfsdump mutt
-                                                             cloud-init sysstat]
+                                                             cloud-init sysstat)
                                                         end
                                                       else
-                                                        %w[rsyslog gnutls rsyslog-gnutls perl-YAML-LibYAML acpid
+                                                        %w(rsyslog gnutls rsyslog-gnutls perl-YAML-LibYAML acpid
                                                            python-cheetah python-configobj vim-enhanced screen
                                                            python-pip git htop bash-completion gcc ruby-devel
                                                            zlib-devel ipa-client xfsprogs xfsprogs-devel
-                                                           tmux xfsdump mutt cloud-init sysstat]
+                                                           tmux xfsdump mutt cloud-init sysstat)
                                                       end
                                                     when 'debian'
-                                                      %w[rsyslog gnutls-bin libgnutls30 rsyslog-gnutls libyaml-perl acpid
+                                                      %w(rsyslog gnutls-bin libgnutls30 rsyslog-gnutls libyaml-perl acpid
                                                          python-cheetah python-configobj vim screen
                                                          python-pip git htop bash-completion gcc ruby-dev
                                                          zlib1g-dev freeipa-client xfsprogs xfslibs-dev
-                                                         tmux xfsdump mutt cloud-init sysstat]
+                                                         tmux xfsdump mutt cloud-init sysstat)
                                                     end
 
 # ~ chef-client syslog ~ #

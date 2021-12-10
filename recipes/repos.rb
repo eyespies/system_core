@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: system_core
+# Cookbook:: system_core
 # Recipe:: repos
 #
 # Copyright:: (C) 2016 - 2021 Justin Spies
@@ -18,7 +18,7 @@
 #
 
 # Used to install various outside packages
-include_recipe 'apt::default' if node['platform_family'] == 'debian'
+apt_update if platform_family?('debian')
 
 # Avoid caching something we don't need cached.
 file '/etc/yum.repos.d/cobbler-config.repo' do
