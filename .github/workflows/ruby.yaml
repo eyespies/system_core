@@ -12,15 +12,13 @@ jobs:
     - name: Set up Ruby 2.6
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: 2.6
+        ruby-version: 3.0
     - name: Setup Ruby Components
       env:
         UNIT_AND_LINT: "1"
       run: |
         gem update --system
-        gem install bundler -v 1.17
-        # Using a custom version because the Github Ruby 2.6 includes Bundler 2.1 while ChefDK normally uses 1.17
-        bundle _1.17_ install --jobs 4 --retry 3
+        gem install bundler
     - name: Code Linting
       env:
         UNIT_AND_LINT: "1"
