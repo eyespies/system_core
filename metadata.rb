@@ -7,7 +7,7 @@ license          'Apache-2.0'
 description      'Core operating system configuration for Enterprise Linux'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '6.0.0'
-chef_version     '>= 17'
+chef_version     '>= 16'
 
 depends 'apt', '~> 7.4.0'
 depends 'chrony', '~> 1.2.0'
