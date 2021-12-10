@@ -4,9 +4,9 @@
 
 ### Breaking
 
-- Remove support for Chef 14 and EL6 platforms
-- Upgrade to Ruby 3 from 2.6
-- Include additional Oracle YUM repos defaulting to disabled
+- Justin Spies - Remove support for Chef 14 and EL6 platforms
+- Justin Spies - Upgrade to Ruby 3 from 2.6
+- Justin Spies - Include additional Oracle YUM repos defaulting to disabled
 
 ## 5.0.0 (2021-09-11)
 
