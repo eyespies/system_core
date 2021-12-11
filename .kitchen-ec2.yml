@@ -111,7 +111,7 @@ transport:
 
 provisioner:
   product_name: chef
-  product_version: "<%= ENV.has_key?('CHEF_VERSION') ? ENV['CHEF_VERSION'] : 14 %>"
+  product_version: "<%= ENV.has_key?('CHEF_VERSION') ? ENV['CHEF_VERSION'] : 17 %>"
   # You may wish to disable always updating cookbooks in CI or other testing environments.
   # For example:
   #   always_update_cookbooks: <%= !ENV['CI'] %>
@@ -125,13 +125,6 @@ verifier:
   name: inspec
 
 platforms:
-  - name: ubuntu-16.04
-    driver:
-      image_search:
-        owner-id: "099720109477"
-        name: "ubuntu/images/hvm-ssd/ubuntu-xenial-16.04"
-    transport:
-      username: ubuntu
   - name: ubuntu-18.04
     driver:
       image_search:
@@ -139,33 +132,43 @@ platforms:
         name: "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04"
     transport:
       username: ubuntu
-  - name: centos-6.10
+  - name: ubuntu-20.04
     driver:
       image_search:
-        owner-id: "679593333241"
-        name: "CentOS Linux 6 x86_64"
+        owner-id: "099720109477"
+        name: "ubuntu/images/hvm-ssd/ubuntu-focal-20.04"
     transport:
-      username: centos
-  - name: centos-7.7
+      username: ubuntu
+  - name: centos-7
     driver:
+      # To see a list of CentOS images, use the command below
+      # `aws ec2 describe-images --owners 125523088429 --filters 'Name=is-public,Values=true' --filters 'Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^CentOS Stream 7 x86_64")) | { Desc: .Description, Name: .Name, ImageId: .ImageId, Created: .CreationDate}'`
       image_search:
-        owner-id: "679593333241"
-        name: "CentOS Linux 7 x86_64"
+        owner-id: "125523088429"
+        name: "CentOS Stream 7 x86_64"
     transport:
       username: centos
-  # Not available yet, see https://bugs.centos.org/view.php?id=16614
-  # - name: centos-8.1
-  #   driver:
-  #     image_search:
-  #       owner-id: "679593333241"
-  #       name: "CentOS Linux 8 x86_64"
-  #   transport:
-  #     username: centos
-  - name: oracle-6.10
+  - name: centos-8
+    driver:
+      # To see a list of CentOS images, use the command below
+      # `aws ec2 describe-images --owners 125523088429 --filters 'Name=is-public,Values=true' --filters 'Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^CentOS Stream 8 x86_64")) | { Desc: .Description, Name: .Name, ImageId: .ImageId, Created: .CreationDate}'`
+      image_search:
+        owner-id: "125523088429"
+        name: "CentOS Stream 8 x86_64"
+    transport:
+      username: centos
+  - name: oracle-7
     driver:
       # To find the image ID for Oracle instances, use the command below, making sure to replace the 'OL7.6' with the correct name prefix
-      # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true,Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^OL6.10")) | .ImageId'`
-      image_id: "<%= ENV['PLATFORMS_ORACLE610_DRIVER_IMAGEID'] %>"
+      # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true' --filters 'Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^OL8")) | { Desc: .Description, Name: .Name, ImageId: .ImageId, Created: .CreationDate}'`
+      image_id: "<%= ENV['PLATFORMS_ORACLE7_DRIVER_IMAGEID'] %>"
+    transport:
+      username: ec2-user
+  - name: oracle-8
+    driver:
+      # To find the image ID for Oracle instances, use the command below, making sure to replace the 'OL7.6' with the correct name prefix
+      # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true' --filters 'Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^OL8")) | { Desc: .Description, Name: .Name, ImageId: .ImageId, Created: .CreationDate}'`
+      image_id: "<%= ENV['PLATFORMS_ORACLE8_DRIVER_IMAGEID'] %>"
       # This doesn't work well because there is no 'standard_platform/oracle.rb' configuration file for the driver.
       # image_search:
       #   architecture: "x86_64"
@@ -175,25 +178,6 @@ platforms:
       #   virtualization-type: "hvm"
     transport:
       username: ec2-user
-  - name: oracle-7.6
-    driver:
-      image_id: "<%= ENV['PLATFORMS_ORACLE76_DRIVER_IMAGEID'] %>"
-    transport:
-      username: ec2-user
-  # - name: oracle-8.1
-  #   driver:
-  #     # To find the image ID for Oracle instances, use the command below, making sure to replace the 'OL7.6' with the correct name prefix
-  #     # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true,Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^OL6.10")) | .ImageId'`
-  #     image_id: "<%= ENV['PLATFORMS_ORACLE81_DRIVER_IMAGEID'] %>"
-  #     # This doesn't work well because there is no 'standard_platform/oracle.rb' configuration file for the driver.
-  #     # image_search:
-  #     #   architecture: "x86_64"
-  #     #   is-public: true
-  #     #   name: "OL7.6-X86_64-HVM-*"
-  #     #   owner-id: "131827586825"
-  #     #   virtualization-type: "hvm"
-  #   transport:
-  #     username: ec2-user
 
 suites:
   - name: base
