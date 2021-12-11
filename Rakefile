@@ -1,6 +1,7 @@
 # encoding: utf-8
 
-require 'cookstyle/rake_task'
+require 'cookstyle'
+require 'rubocop/rake_task'
 require 'rspec/core/rake_task'
 require 'base64'
 require 'chef/cookbook/metadata'
@@ -29,7 +30,21 @@ end
 # Rubocop
 desc 'Run Cookstyle lint checks'
 task :cookstyle do
-  Cookstyle::RakeTask.new
+  begin
+    require 'cookstyle'
+    require 'rubocop/rake_task'
+    RuboCop::RakeTask.new(:cookstyle) do |task|
+      # If we are in CI mode then add formatter options
+      task.options.concat %w(
+        --display-cop-names
+      ) if ENV['CI']
+      # --require rubocop/formatter/checkstyle_formatter
+      # --format RuboCop::Formatter::CheckstyleFormatter
+      # -o reports/xml/checkstyle-result.xml
+    end
+  rescue
+    puts ">>> Gem load error: #{e}, omitting style:cookstyle" unless ENV['CI']
+  end
 end
 
 # Automatically generate a changelog for this project. Only loaded if
