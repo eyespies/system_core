@@ -142,16 +142,16 @@ platforms:
   - name: centos-7
     driver:
       # To see a list of CentOS images, use the command below
-      # `aws ec2 describe-images --owners 125523088429 --filters 'Name=is-public,Values=true' --filters 'Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^CentOS Stream 7 x86_64")) | { Desc: .Description, Name: .Name, ImageId: .ImageId, Created: .CreationDate}'`
+      # `aws ec2 describe-images --owners 679593333241 --filters 'Name=is-public,Values=true' --filters 'Name=virtualization-type,Values=hvm' | jq -r '.Images |=sort_by(.CreationDate) | .Images[] | select(.Name | test("^CentOS Linux 7 x86_64")) | { Desc: .Description, Name: .Name, ImageId: .ImageId, Created: .CreationDate}'`
       image_search:
-        owner-id: "125523088429"
+        owner-id: "679593333241"
         name: "CentOS Stream 7 x86_64"
     transport:
       username: centos
   - name: centos-8
     driver:
       # To see a list of CentOS images, use the command below
-      # `aws ec2 describe-images --owners 125523088429 --filters 'Name=is-public,Values=true' --filters 'Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^CentOS Stream 8 x86_64")) | { Desc: .Description, Name: .Name, ImageId: .ImageId, Created: .CreationDate}'`
+      # `aws ec2 describe-images --owners 125523088429 --filters 'Name=is-public,Values=true' --filters 'Name=virtualization-type,Values=hvm' | jq -r '.Images |=sort_by(.CreationDate) | .Images[] | select(.Name | test("^CentOS Stream 8 x86_64")) | { Desc: .Description, Name: .Name, ImageId: .ImageId, Created: .CreationDate}'`
       image_search:
         owner-id: "125523088429"
         name: "CentOS Stream 8 x86_64"
@@ -160,14 +160,14 @@ platforms:
   - name: oracle-7
     driver:
       # To find the image ID for Oracle instances, use the command below, making sure to replace the 'OL7.6' with the correct name prefix
-      # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true' --filters 'Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^OL8")) | { Desc: .Description, Name: .Name, ImageId: .ImageId, Created: .CreationDate}'`
+      # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true' --filters 'Name=virtualization-type,Values=hvm' | jq -r '.Images |=sort_by(.CreationDate) | .Images[] | select(.Name | test("^OL7")) | { Desc: .Description, Name: .Name, ImageId: .ImageId, Created: .CreationDate}'`
       image_id: "<%= ENV['PLATFORMS_ORACLE7_DRIVER_IMAGEID'] %>"
     transport:
       username: ec2-user
   - name: oracle-8
     driver:
       # To find the image ID for Oracle instances, use the command below, making sure to replace the 'OL7.6' with the correct name prefix
-      # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true' --filters 'Name=virtualization-type,Values=hvm' | jq -r '.Images[] | select(.Name | test("^OL8")) | { Desc: .Description, Name: .Name, ImageId: .ImageId, Created: .CreationDate}'`
+      # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true' --filters 'Name=virtualization-type,Values=hvm' | jq -r '.Images |=sort_by(.CreationDate) | .Images[] | select(.Name | test("^OL8")) | { Desc: .Description, Name: .Name, ImageId: .ImageId, Created: .CreationDate}'`
       image_id: "<%= ENV['PLATFORMS_ORACLE8_DRIVER_IMAGEID'] %>"
       # This doesn't work well because there is no 'standard_platform/oracle.rb' configuration file for the driver.
       # image_search:
