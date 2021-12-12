@@ -6,7 +6,7 @@ issues_url       'https://github.com/eyespies/system_core/issues'
 license          'Apache-2.0'
 description      'Core operating system configuration for Enterprise Linux'
 version          '6.0.0'
-chef_version     '>= 16'
+chef_version     '>= 17'
 
 depends 'apt', '~> 7.4.0'
 depends 'chrony', '~> 1.2.0'
