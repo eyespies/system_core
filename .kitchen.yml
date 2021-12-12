@@ -21,7 +21,7 @@ verifier:
 platforms:
   - name: ubuntu-18.04
   - name: ubuntu-20.04
-  - name: oracle-7.7
+  - name: oracle-7.9
   - name: oracle-8.1
 
 suites:
