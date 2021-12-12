@@ -6,8 +6,7 @@ describe 'system_core::selinux' do
     versions.each do |version|
       context "On #{platform} #{version}" do
         before do
-          allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('selinux')
-          allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('selinux::disabled')
+          allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('selinux::permissive')
         end
 
         cached(:chef_run) do
@@ -17,7 +16,7 @@ describe 'system_core::selinux' do
         end
 
         it 'should include the selinux recipes' do
-          expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('selinux')
+          expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('selinux::permissive')
           chef_run
         end
       end

@@ -18,7 +18,12 @@
 #
 
 # Used to install various outside packages
-apt_update if platform_family?('debian')
+if platform_family?('debian')
+  # In theory the syntax could be simplified to just `apt_update`, however I could not find a way to get the tests to pass in repos_spec.rb
+  apt_update 'update_apt' do
+    action :update
+  end
+end
 
 # Avoid caching something we don't need cached.
 file '/etc/yum.repos.d/cobbler-config.repo' do
@@ -57,15 +62,6 @@ if node['platform'] =~ /oracle/ && node['platform_version'] =~ /^7/
       make_cache true
       action :create
     end
-  end
-
-  yum_repository 'ol7_epel_latest' do
-    description 'Oracle Linux $releasever Optional Latest ($basearch)'
-    baseurl node['system_core']['repos']['ol7_epel_latest']['url']
-    gpgkey 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle'
-    gpgcheck true
-    make_cache true
-    action :create
   end
 elsif node['platform'] =~ /oracle/ && node['platform_version'] =~ /^8/
   # Deleting because it conflicts with Chef setting up the other repositories and causes errors about the

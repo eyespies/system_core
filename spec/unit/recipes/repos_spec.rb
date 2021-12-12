@@ -48,13 +48,12 @@ describe 'system_core::repos' do
           chef_run.node['system_core']['system']['packages']
         end
 
-        it 'should call the necessary YUM recipes' do
+        it 'should properly handle the Ubuntu apt recipe' do
           if platform == 'ubuntu'
-            expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('apt::default')
+            expect(chef_run).to update_apt_update('update_apt')
           else
-            expect_any_instance_of(Chef::Recipe).to_not receive(:include_recipe).with('apt::default')
+            expect(chef_run).to_not update_apt_update('update_apt')
           end
-          chef_run
         end
 
         it 'should delete any cobbler created repo files' do
@@ -100,7 +99,6 @@ describe 'system_core::repos' do
       context "On #{platform} #{version} setup YUM repositories and not update MySQL if it is already updated" do
         before do
           # Mock accepting the include_recipe commands
-          allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('apt::default')
           stub_command("yum list installed|grep mysql55w-libs").and_return(true)
         end
 
@@ -114,15 +112,14 @@ describe 'system_core::repos' do
           chef_run.node['system_core']['system']['packages']
         end
 
-        it 'should call the necessary YUM recipes' do
+        it 'should properly handle the Ubuntu apt recipe' do
           if platform == 'ubuntu'
-            expect_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('apt::default')
+            expect(chef_run).to update_apt_update('update_apt')
           else
-            expect_any_instance_of(Chef::Recipe).to_not receive(:include_recipe).with('apt::default')
+            expect(chef_run).to_not update_apt_update('update_apt')
           end
-
-          chef_run
         end
+
 
         it 'should delete any cobbler created repo files' do
           expect(chef_run).to delete_file('/etc/yum.repos.d/cobbler-config.repo')
