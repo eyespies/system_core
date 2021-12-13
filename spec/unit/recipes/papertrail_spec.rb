@@ -20,9 +20,11 @@ describe 'system_core::papertrail' do
   # specific URLs that must exist
   platforms.each do |platform, details|
     versions = details['versions']
-    versions.each do |version|
+    versions.each do |version, opts|
       context "On #{platform} #{version} with papertrail enabled" do
         before do
+          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
+
           # Mock accepting the include_recipe commands
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('system_core::rsyslog')
         end
@@ -76,6 +78,8 @@ describe 'system_core::papertrail' do
 
       context "On #{platform} #{version} with papertrail disabled" do
         before do
+          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
+
           # Mock accepting the include_recipe commands
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('system_core::rsyslog')
         end

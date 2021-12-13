@@ -5,9 +5,11 @@ describe 'system_core::ntp' do
   # specific URLs that must exist
   platforms.each do |platform, details|
     versions = details['versions']
-    versions.each do |version|
+    versions.each do |version, opts|
       context "On #{platform} #{version} setup the localtime" do
         before do
+          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
+
           # Mock accepting the include_recipe commands
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('ntp::default')
           stub_command("[ `readlink /etc/localtime` == \"/usr/share/zoneinfo/EST5EDT\" ]").and_return(false)
@@ -36,6 +38,8 @@ describe 'system_core::ntp' do
 
       context "On #{platform} #{version} localtime is set and does not need updated" do
         before do
+          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
+
           # Mock accepting the include_recipe commands
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('ntp::default')
           stub_command("[ `readlink /etc/localtime` == \"/usr/share/zoneinfo/EST5EDT\" ]").and_return(true)

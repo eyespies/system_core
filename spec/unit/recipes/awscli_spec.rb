@@ -3,11 +3,12 @@ require 'spec_helper'
 describe 'system_core::awscli' do
   platforms.each do |platform, details|
     versions = details['versions']
-    versions.each do |version|
+    versions.each do |version, opts|
       [true, false].each do |has_aws|
         [true, false].each do |has_profile|
           context "On #{platform} #{version} #{has_profile ? 'with' : 'without'} an AWS configuration profile and #{has_aws ? 'with' : 'without'} the CLI installed" do
             before do
+              Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
               stub_command('which aws').and_return(has_aws)
             end
 

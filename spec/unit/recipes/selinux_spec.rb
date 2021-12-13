@@ -3,9 +3,11 @@ require 'spec_helper'
 describe 'system_core::selinux' do
   platforms.each do |platform, details|
     versions = details['versions']
-    versions.each do |version|
+    versions.each do |version, opts|
       context "On #{platform} #{version}" do
         before do
+          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
+
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('selinux::permissive')
         end
 

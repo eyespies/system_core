@@ -29,9 +29,11 @@ describe 'system_core::repos' do
   # to specific URLs that must exist
   platforms.each do |platform, details|
     versions = details['versions']
-    versions.each do |version|
+    versions.each do |version, opts|
       context "On #{platform} #{version} setup YUM repositories and remove MySQL if is not updated" do
         before do
+          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
+
           # Mock accepting the include_recipe commands
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum')
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('apt::default')
@@ -98,6 +100,8 @@ describe 'system_core::repos' do
 
       context "On #{platform} #{version} setup YUM repositories and not update MySQL if it is already updated" do
         before do
+          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
+
           # Mock accepting the include_recipe commands
           stub_command("yum list installed|grep mysql55w-libs").and_return(true)
         end

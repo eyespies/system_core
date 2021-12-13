@@ -5,12 +5,14 @@ describe 'system_core::user_ssh' do
   # specific URLs that must exist
   platforms.each do |platform, details|
     versions = details['versions']
-    versions.each do |version|
+    versions.each do |version, opts|
       # NOTE: Currently unable to test the 'without any custom user SSH keys' because defaults are set for both the
       # authorized_keys and the user_config. Have tried unsetting / deleting / setting the values to nil, but it
       # does not work.
       context "On #{platform} #{version}, with custom SSH configuration for a user" do
         before do
+          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
+
           # Don't use allow_any_instance_of because :home is a static / class scoped method and not an instance method.
           allow(Dir).to receive(:home).with('root').and_return('/root')
           allow_any_instance_of(Chef::Recipe).to receive(:ssh_authorize_key)
@@ -52,6 +54,8 @@ describe 'system_core::user_ssh' do
 
       context "On #{platform} #{version}, with custom SSH keys for a user" do
         before do
+          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
+
           # Don't use allow_any_instance_of because :home is a static / class scoped method and not an instance method.
           allow(Dir).to receive(:home).with('root').and_return('/root')
           allow_any_instance_of(Chef::Recipe).to receive(:ssh_authorize_key)
@@ -82,6 +86,8 @@ describe 'system_core::user_ssh' do
 
       context "On #{platform} #{version}, with custom SSH keys but missing AWS keys" do
         before do
+          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
+
           # Don't use allow_any_instance_of because :home is a static / class scoped method and not an instance method.
           allow(Dir).to receive(:home).with('root').and_return('/root')
           allow_any_instance_of(Chef::Recipe).to receive(:ssh_authorize_key)
