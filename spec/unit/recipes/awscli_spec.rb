@@ -8,12 +8,11 @@ describe 'system_core::awscli' do
         [true, false].each do |has_profile|
           context "On #{platform} #{version} #{has_profile ? 'with' : 'without'} an AWS configuration profile and #{has_aws ? 'with' : 'without'} the CLI installed" do
             before do
-              Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
               stub_command('which aws').and_return(has_aws)
             end
 
             cached(:chef_run) do
-              runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+              runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
               runner.node.override['environment'] = 'dev'
               if has_profile
                 runner.node.override['system_core']['aws']['profiles']['default']['output_format'] = 'json'

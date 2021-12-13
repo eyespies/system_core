@@ -8,15 +8,13 @@ describe 'system_core::ntp' do
     versions.each do |version, opts|
       context "On #{platform} #{version} setup the localtime" do
         before do
-          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
-
           # Mock accepting the include_recipe commands
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('ntp::default')
           stub_command("[ `readlink /etc/localtime` == \"/usr/share/zoneinfo/EST5EDT\" ]").and_return(false)
         end
 
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
           runner.node.override['environment'] = 'dev'
           runner.converge(described_recipe)
         end
@@ -38,15 +36,13 @@ describe 'system_core::ntp' do
 
       context "On #{platform} #{version} localtime is set and does not need updated" do
         before do
-          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
-
           # Mock accepting the include_recipe commands
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('ntp::default')
           stub_command("[ `readlink /etc/localtime` == \"/usr/share/zoneinfo/EST5EDT\" ]").and_return(true)
         end
 
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
           runner.node.override['environment'] = 'dev'
           runner.converge(described_recipe)
         end
@@ -61,11 +57,6 @@ describe 'system_core::ntp' do
         it 'should configure the zone info in /etc/localtime' do
           expect(chef_run).to_not run_execute 'configure_ntp'
         end
-
-        # it 'should enable and start the NTP service' do
-        #   expect(chef_run).to enable_service 'ntpd'
-        #   expect(chef_run).to start_service 'ntpd'
-        # end
       end
     end
   end

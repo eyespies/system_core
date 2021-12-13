@@ -23,14 +23,12 @@ describe 'system_core::papertrail' do
     versions.each do |version, opts|
       context "On #{platform} #{version} with papertrail enabled" do
         before do
-          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
-
           # Mock accepting the include_recipe commands
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('system_core::rsyslog')
         end
 
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
           runner.node.override['environment'] = 'dev'
           runner.node.override['system_core']['papertrail']['enabled'] = true
           runner.converge(described_recipe) do
@@ -78,14 +76,12 @@ describe 'system_core::papertrail' do
 
       context "On #{platform} #{version} with papertrail disabled" do
         before do
-          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
-
           # Mock accepting the include_recipe commands
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('system_core::rsyslog')
         end
 
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
           runner.node.override['environment'] = 'dev'
           runner.node.override['system_core']['papertrail']['enabled'] = false
           runner.converge(described_recipe) do

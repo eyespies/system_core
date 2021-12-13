@@ -7,12 +7,8 @@ describe 'system_core::papertrail_remote' do
     versions = details['versions']
     versions.each do |version, opts|
       context "On #{platform} #{version} with papertrail enabled" do
-        before do
-          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
-        end
-
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, file_cache_path: '/tmp')
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'], file_cache_path: '/tmp')
           runner.node.override['environment'] = 'dev'
           runner.node.override['system_core']['papertrail']['enabled'] = true
           runner.node.override['system_core']['papertrail']['remote_host'] = '@@logs.papertrailapp.com:12345'
@@ -55,12 +51,8 @@ describe 'system_core::papertrail_remote' do
       end
 
       context "On #{platform} #{version} with papertrail disabled" do
-        before do
-          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
-        end
-
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, file_cache_path: '/tmp')
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'], file_cache_path: '/tmp')
           runner.node.override['environment'] = 'dev'
           runner.node.override['system_core']['papertrail']['enabled'] = false
           runner.node.override['system_core']['papertrail']['remote_syslog2']['config']['file_name'] = '/etc/remote_syslog.conf'

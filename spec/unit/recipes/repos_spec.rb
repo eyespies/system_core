@@ -32,8 +32,6 @@ describe 'system_core::repos' do
     versions.each do |version, opts|
       context "On #{platform} #{version} setup YUM repositories and remove MySQL if is not updated" do
         before do
-          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
-
           # Mock accepting the include_recipe commands
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('yum')
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('apt::default')
@@ -41,7 +39,7 @@ describe 'system_core::repos' do
         end
 
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
           runner.node.default['environment'] = 'dev'
           runner.converge(described_recipe)
         end
@@ -100,14 +98,12 @@ describe 'system_core::repos' do
 
       context "On #{platform} #{version} setup YUM repositories and not update MySQL if it is already updated" do
         before do
-          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
-
           # Mock accepting the include_recipe commands
           stub_command("yum list installed|grep mysql55w-libs").and_return(true)
         end
 
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
           runner.node.default['environment'] = 'dev'
           runner.converge(described_recipe)
         end

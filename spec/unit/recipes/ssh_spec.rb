@@ -6,13 +6,11 @@ describe 'system_core::ssh' do
     versions.each do |version, opts|
       context "On #{platform} #{version}" do
         before do
-          Fauxhai.mock(platform: platform, version: version, path: opts['fixture_path']) if opts.key?('fixture_path')
-
           allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('openssh')
         end
 
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
           runner.node.override['environment'] = 'dev'
           runner.converge(described_recipe)
         end
