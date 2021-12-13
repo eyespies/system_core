@@ -120,7 +120,6 @@ describe 'system_core::repos' do
           end
         end
 
-
         it 'should delete any cobbler created repo files' do
           expect(chef_run).to delete_file('/etc/yum.repos.d/cobbler-config.repo')
         end
