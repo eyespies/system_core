@@ -3,13 +3,13 @@ def platforms
   {
     'ubuntu' => {
       'versions' => {
-        '18.04' => { },
-        '20.04' => { },
+        '18.04' => {},
+        '20.04' => {},
       },
     },
     'oracle' => {
       'versions' => {
-        '7.6' => { },
+        '7.6' => {},
         '8.2' => { 'fixture_path' => 'test/fixtures/oracle-8.2.json' },
       },
     },

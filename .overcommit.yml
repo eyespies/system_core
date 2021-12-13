@@ -16,14 +16,11 @@
 # Uncomment the following lines to make the configuration take effect.
 
 PreCommit:
-  RuboCop:
+  Cookstyle:
     enabled: true
     on_warn: fail # Treat all warnings as failures
   TrailingWhitespace:
     enabled: true
-  FoodCritic:
-    enabled: true
-    description: 'Checking against foodcritic known issues'
   XmlLint:
     enabled: true
 #
