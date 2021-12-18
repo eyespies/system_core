@@ -10,11 +10,6 @@ chef_version     '>= 17'
 
 depends 'apt', '~> 7.4.0'
 depends 'chrony', '~> 1.2.0'
-# This is the 3ofcoins version and is the one from which all others are forked. Tried using the 'hostnames' version
-# from nathantsoi, however it does not properly support Oracle Linux. It also generates Chef warnings and although a
-# PR was submitted in January 2017 to eliminate the warnings, as of August 2017 the maintainer has not merged the PR.
-# So it seems the nathantsoi version is no longer maintained.
-depends 'hostname', '~> 0.4.0'
 depends 'iptables', '~> 8.0.0'
 depends 'logrotate', '~> 3.0.5'
 depends 'ntp', '~> 3.12.0'
