@@ -1,12 +1,26 @@
 # system_core Cookbook Change Log
 
-## 6.0.0 (2021-12-08)
+## 6.0.0 (2021-12-20)
 
 ### Breaking
 
 - Justin Spies - Remove support for Chef 14 and EL6 platforms
 - Justin Spies - Upgrade to Ruby 3 from 2.6
 - Justin Spies - Include additional Oracle YUM repos defaulting to disabled
+- Justin Spies - Simplify to a single Gemfile compatible with Chef 17; remove extraneous RuboCop configuration after switching to Cookstyle
+- Justin Spies - Removed "hostname" cookbook so users can leverage the Chef "hostname" resource instead
+- Justin Spies - Require Chef 17
+
+### Changed
+
+- Justin Spies - Add tests for disabled, not just enabled, repos
+- Justin Spies - Set latest Oracle AMI IDs, use CentOS 8 Stream
+- Justin Spies - Increase RAM allocation to speed things up a little
+
+### Fixed
+
+- Justin Spies - Use Git paths so running in EC2 works; reduce default logging and increase concurrency
+- Justin Spies - Add volume resizing for OL AMIs since 2GB is not enough for Oracle; use correct URL for UEK6
 
 ## 5.0.0 (2021-09-11)
 
