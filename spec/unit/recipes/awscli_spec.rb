@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'system_core::awscli' do
   platforms.each do |platform, details|
     versions = details['versions']
-    versions.each do |version|
+    versions.each do |version, opts|
       [true, false].each do |has_aws|
         [true, false].each do |has_profile|
           context "On #{platform} #{version} #{has_profile ? 'with' : 'without'} an AWS configuration profile and #{has_aws ? 'with' : 'without'} the CLI installed" do
@@ -12,7 +12,7 @@ describe 'system_core::awscli' do
             end
 
             cached(:chef_run) do
-              runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+              runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
               runner.node.override['environment'] = 'dev'
               if has_profile
                 runner.node.override['system_core']['aws']['profiles']['default']['output_format'] = 'json'

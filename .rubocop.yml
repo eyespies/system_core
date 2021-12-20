@@ -4,7 +4,7 @@ AllCops:
     - vendor/**/*
   DisplayCopNames: true
 
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   Enabled: false
 
 Layout/SpaceBeforeFirstArg:
@@ -14,7 +14,7 @@ Layout/SpaceBeforeFirstArg:
 Metrics/BlockLength:
   Max: 35
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 180
 
 Style/Encoding:

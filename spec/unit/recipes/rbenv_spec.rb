@@ -5,10 +5,10 @@ describe 'system_core::rbenv' do
   # to specific URLs that must exist
   platforms.each do |platform, details|
     versions = details['versions']
-    versions.each do |version|
+    versions.each do |version, opts|
       context "On #{platform} #{version}" do
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
           runner.node.override['environment'] = 'dev'
           runner.converge(described_recipe)
         end

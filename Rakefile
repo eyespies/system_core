@@ -1,24 +1,24 @@
 # encoding: utf-8
 
-require 'foodcritic'
-require 'rspec/core/rake_task'
+require 'cookstyle'
 require 'rubocop/rake_task'
+require 'rspec/core/rake_task'
 require 'base64'
 require 'chef/cookbook/metadata'
 
 # General tasks
 
-# Rubocop before rspec so we don't lint vendored cookbooks
+# Cookstyle before rspec so we don't lint vendored cookbooks
 desc 'Run all tests except Kitchen (default task)'
-task default: %i[lint spec]
+task default: %i(lint spec)
 
 # Lint the cookbook
-desc 'Run all linters: rubocop and foodcritic'
-task lint: %i[rubocop foodcritic]
+desc 'Run all linters: cookstyle'
+task lint: %i(cookstyle)
 
 # Run the whole shebang
 desc 'Run all tests'
-task test: %i[lint kitchen spec]
+task test: %i(lint kitchen spec)
 
 # RSpec
 desc 'Run chefspec tests'
@@ -27,20 +27,24 @@ task :spec do
   RSpec::Core::RakeTask.new(:spec)
 end
 
-# Foodcritic
-desc 'Run foodcritic lint checks'
-task :foodcritic do
-  puts 'Running Foodcritic tests...'
-  FoodCritic::Rake::LintTask.new do |t|
-    t.options = { fail_tags: ['any'] }
-    puts 'done.'
-  end
-end
-
 # Rubocop
-desc 'Run Rubocop lint checks'
-task :rubocop do
-  RuboCop::RakeTask.new
+desc 'Run Cookstyle lint checks'
+task :cookstyle do
+  begin
+    require 'cookstyle'
+    require 'rubocop/rake_task'
+    RuboCop::RakeTask.new(:cookstyle) do |task|
+      # If we are in CI mode then add formatter options
+      task.options.concat %w(
+        --display-cop-names
+      ) if ENV['CI']
+      # --require rubocop/formatter/checkstyle_formatter
+      # --format RuboCop::Formatter::CheckstyleFormatter
+      # -o reports/xml/checkstyle-result.xml
+    end
+  rescue
+    puts ">>> Gem load error: #{e}, omitting style:cookstyle" unless ENV['CI']
+  end
 end
 
 # Automatically generate a changelog for this project. Only loaded if
@@ -71,10 +75,10 @@ end
 
 desc 'Run kitchen integration tests on AWS EC2'
 task :kitchen_ec2 do
-  concurrency = ENV['CONCURRENCY'] || 1
+  concurrency = ENV['CONCURRENCY'] || 4
   instance = ENV['INSTANCE'] || ''
   args = ENV['CI'] ? '--destroy=always' : ''
-  sh('sh', '-c', "bundle exec kitchen test -l debug -c #{concurrency} #{args} #{instance}")
+  sh('sh', '-c', "bundle exec kitchen test -l info -c #{concurrency} #{args} #{instance}")
 end
 
 desc 'Prepare CI environment for DigitalOcean usage'

@@ -3,11 +3,11 @@ driver:
   name: vagrant
   customize:
     memory: 1024
-    cpus: 1
+    cpus: 2
 
 provisioner:
   product_name: chef
-  product_version: "<%= ENV.has_key?('CHEF_VERSION') ? ENV['CHEF_VERSION'] : 14 %>"
+  product_version: "<%= ENV.has_key?('CHEF_VERSION') ? ENV['CHEF_VERSION'] : 17 %>"
   # You may wish to disable always updating cookbooks in CI or other testing environments.
   # For example:
   #   always_update_cookbooks: <%= !ENV['CI'] %>
@@ -19,12 +19,9 @@ verifier:
   name: inspec
 
 platforms:
-  - name: ubuntu-16.04
   - name: ubuntu-18.04
-  - name: centos-6.10
-  - name: centos-7.7
-  - name: oracle-6.10
-  - name: oracle-7.7
+  - name: ubuntu-20.04
+  - name: oracle-7.9
   - name: oracle-8.1
 
 suites:
@@ -43,15 +40,12 @@ suites:
       - recipe[system_core::ntp]
       - recipe[system_core::selinux]
       - recipe[system_core::ssh]
+      - recipe[system_core::sudo]
       - recipe[system_core::logrotate]
       - recipe[system_core::user_ssh]
     attributes:
       system_core:
         ssh:
-          authorized_keys:
-            root:
-              public_key: "AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd"
-              user: 'root'
           user_config:
             root:
               hosts:
@@ -60,18 +54,6 @@ suites:
                   ForwardAgent: "yes"
                   UserKnownHostsFile: "/dev/null"
                   StrictHostKeyChecking: "no"
-              keys:
-                id_rsa:
-                  owner: root
-                  ssh_key_bucket: "<%= ENV['SSH_KEY_BUCKET'] %>"
-                  ssh_key_path: "<%= ENV.key?('ROOT_SSH_KEY_PATH') ? ENV['ROOT_SSH_KEY_PATH'] : 'ssh-keys/root' %>"
-        aws:
-          profiles:
-            default:
-              output_format: "json"
-              region: "<%= ENV.key('AWS_REGION') ? ENV['AWS_REGION'] : 'us-east-1' %>"
-              access_key: "<%= ENV['AWS_ACCESS_KEY_ID'] %>"
-              secret_key: "<%= ENV['AWS_SECRET_ACCESS_KEY'] %>"
   - name: logging
     data_bags_path: "../../data_bags"
     run_list:
@@ -112,11 +94,4 @@ suites:
         default_domain: linux.alt.org
     attributes:
       system_core:
-        aws:
-          profiles:
-            default:
-              output_format: "json"
-              region: "<%= ENV.key('AWS_REGION') ? ENV['AWS_REGION'] : 'us-east-1' %>"
-              access_key: "<%= ENV['AWS_ACCESS_KEY_ID'] %>"
-              secret_key: "<%= ENV['AWS_SECRET_ACCESS_KEY'] %>"
         domain: "linux.alt.org"

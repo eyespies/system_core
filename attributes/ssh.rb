@@ -1,8 +1,8 @@
 #
-# Cookbook :: system_core
+# Cookbook:: system_core
 # Attributes :: ssh
 #
-# Copyright (C) 2016 - 2020 Justin Spies
+# Copyright:: (C) 2016 - 2021 Justin Spies
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,13 +31,13 @@ node.override['ssh_known_hosts']['cacher']['data_bag_item'] = 'known_hosts'
 node.default['system_core']['ssh']['user_config']['root']['config']['hosts']['*'].tap do |config|
   config['SendEnv'] = 'LANG LC_*'
   config['ForwardAgent'] = 'yes'
-  config['HostkeyAlgorithms'] = '+ssh-ed25519,ssh-rsa,ssh-dss,ecdsa-sha2-nistp256' if node['platform_family'] == 'rhel' && node['platform_version'] =~ /^7/
+  config['HostkeyAlgorithms'] = '+ssh-ed25519,ssh-rsa,ssh-dss,ecdsa-sha2-nistp256' if platform_family?('rhel') && node['platform_version'] =~ /^7/
   config['UserKnownHostsFile'] = '/dev/null'
   config['StrictHostKeyChecking'] = 'no'
 end
 
-node.default['system_core']['ssh']['user_config']['root']['config']['hosts']['github.com bitbucket.org bitbucket.com'].tap do |config|
-  config['IdentityFile'] = '~/.ssh/id_rsa'
-  config['UserKnownHostsFile'] = '~/.ssh/known_hosts'
-  config['StrictHostKeyChecking'] = 'yes'
-end
+# node.default['system_core']['ssh']['user_config']['root']['config']['hosts']['github.com bitbucket.org bitbucket.com'].tap do |config|
+#   config['IdentityFile'] = '~/.ssh/id_rsa'
+#   config['UserKnownHostsFile'] = '~/.ssh/known_hosts'
+#   config['StrictHostKeyChecking'] = 'yes'
+# end

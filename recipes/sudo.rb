@@ -1,6 +1,6 @@
 #
 # Cookbook:: system_core
-# Recipe:: postfix
+# Recipe:: ssh
 #
 # Copyright:: (C) 2016 - 2021 Justin Spies
 #
@@ -16,4 +16,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-include_recipe 'postfix'
+package 'sudo'
+
+sudo 'global_sudo' do
+  defaults               node['system_core']['sudo']['sudoers_defaults']
+  groups                 node['system_core']['sudo']['groups']
+  nopasswd               node['system_core']['sudo']['passwordless']
+end

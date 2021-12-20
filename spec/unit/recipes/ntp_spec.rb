@@ -5,7 +5,7 @@ describe 'system_core::ntp' do
   # specific URLs that must exist
   platforms.each do |platform, details|
     versions = details['versions']
-    versions.each do |version|
+    versions.each do |version, opts|
       context "On #{platform} #{version} setup the localtime" do
         before do
           # Mock accepting the include_recipe commands
@@ -14,7 +14,7 @@ describe 'system_core::ntp' do
         end
 
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
           runner.node.override['environment'] = 'dev'
           runner.converge(described_recipe)
         end
@@ -42,7 +42,7 @@ describe 'system_core::ntp' do
         end
 
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
           runner.node.override['environment'] = 'dev'
           runner.converge(described_recipe)
         end
@@ -57,11 +57,6 @@ describe 'system_core::ntp' do
         it 'should configure the zone info in /etc/localtime' do
           expect(chef_run).to_not run_execute 'configure_ntp'
         end
-
-        # it 'should enable and start the NTP service' do
-        #   expect(chef_run).to enable_service 'ntpd'
-        #   expect(chef_run).to start_service 'ntpd'
-        # end
       end
     end
   end

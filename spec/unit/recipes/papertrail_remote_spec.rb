@@ -5,10 +5,10 @@ describe 'system_core::papertrail_remote' do
   # specific URLs that must exist
   platforms.each do |platform, details|
     versions = details['versions']
-    versions.each do |version|
+    versions.each do |version, opts|
       context "On #{platform} #{version} with papertrail enabled" do
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, file_cache_path: '/tmp')
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'], file_cache_path: '/tmp')
           runner.node.override['environment'] = 'dev'
           runner.node.override['system_core']['papertrail']['enabled'] = true
           runner.node.override['system_core']['papertrail']['remote_host'] = '@@logs.papertrailapp.com:12345'
@@ -52,7 +52,7 @@ describe 'system_core::papertrail_remote' do
 
       context "On #{platform} #{version} with papertrail disabled" do
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, file_cache_path: '/tmp')
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'], file_cache_path: '/tmp')
           runner.node.override['environment'] = 'dev'
           runner.node.override['system_core']['papertrail']['enabled'] = false
           runner.node.override['system_core']['papertrail']['remote_syslog2']['config']['file_name'] = '/etc/remote_syslog.conf'

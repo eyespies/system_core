@@ -4,23 +4,23 @@ describe 'system_core::papertrail' do
   packages = {
     'ubuntu' => {
       'gnutls-package' => 'rsyslog-gnutls',
-      'rsyslog-service' => 'rsyslog'
+      'rsyslog-service' => 'rsyslog',
     },
     'centos' => {
       'gnutls-package' => 'rsyslog-gnutls',
-      'rsyslog-service' => 'rsyslog'
+      'rsyslog-service' => 'rsyslog',
     },
     'oracle' => {
       'gnutls-package' => 'rsyslog-gnutls',
-      'rsyslog-service' => 'rsyslog'
-    }
+      'rsyslog-service' => 'rsyslog',
+    },
   }
 
   # Used by Fauxhai to retrieve configuration details that are feed into ChefSpec; these correspond to
   # specific URLs that must exist
   platforms.each do |platform, details|
     versions = details['versions']
-    versions.each do |version|
+    versions.each do |version, opts|
       context "On #{platform} #{version} with papertrail enabled" do
         before do
           # Mock accepting the include_recipe commands
@@ -28,7 +28,7 @@ describe 'system_core::papertrail' do
         end
 
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
           runner.node.override['environment'] = 'dev'
           runner.node.override['system_core']['papertrail']['enabled'] = true
           runner.converge(described_recipe) do
@@ -81,7 +81,7 @@ describe 'system_core::papertrail' do
         end
 
         cached(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
           runner.node.override['environment'] = 'dev'
           runner.node.override['system_core']['papertrail']['enabled'] = false
           runner.converge(described_recipe) do

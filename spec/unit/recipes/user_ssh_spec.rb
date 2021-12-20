@@ -5,26 +5,25 @@ describe 'system_core::user_ssh' do
   # specific URLs that must exist
   platforms.each do |platform, details|
     versions = details['versions']
-    versions.each do |version|
+    versions.each do |version, opts|
       # NOTE: Currently unable to test the 'without any custom user SSH keys' because defaults are set for both the
       # authorized_keys and the user_config. Have tried unsetting / deleting / setting the values to nil, but it
       # does not work.
       context "On #{platform} #{version}, with custom SSH configuration for a user" do
         before do
+          # Fauxhai.mock(path: opts['fixture_path'])
+
           # Don't use allow_any_instance_of because :home is a static / class scoped method and not an instance method.
           allow(Dir).to receive(:home).with('root').and_return('/root')
           allow_any_instance_of(Chef::Recipe).to receive(:ssh_authorize_key)
         end
 
         let(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
+          # runner = ChefSpec::SoloRunner.new
           runner.node.default['environment'] = 'dev'
 
-          # Must use node.override
-          runner.node.override['system_core']['aws']['profiles']['default']['access_key'] = 'AKIASOMETHINGFAKE'
-          runner.node.override['system_core']['aws']['profiles']['default']['secret_key'] = 'thisismyreallylongawssectaccesskey'
-
-          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Metrics/LineLength
+          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Layout/LineLength
           runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['user'] = 'root'
 
           runner.node.default['system_core']['ssh']['user_config']['root']['config']['hosts']['*']['SendEnv'] = 'LANG LC_*'
@@ -52,11 +51,6 @@ describe 'system_core::user_ssh' do
         it 'should create the user specific SSH configuration file' do
           expect(chef_run).to create_template('/root/.ssh/config')
         end
-
-        it 'should NOT create the SSH public/private key files' do
-          expect(chef_run).to_not create_s3_file('/root/.ssh/id_rsa-chef-solo')
-          expect(chef_run).to_not create_s3_file('/root/.ssh/id_rsa-chef-solo.pub')
-        end
       end
 
       context "On #{platform} #{version}, with custom SSH keys for a user" do
@@ -67,14 +61,10 @@ describe 'system_core::user_ssh' do
         end
 
         let(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
           runner.node.default['environment'] = 'dev'
 
-          # Must use node.override
-          runner.node.override['system_core']['aws']['profiles']['default']['access_key'] = 'AKIASOMETHINGFAKE'
-          runner.node.override['system_core']['aws']['profiles']['default']['secret_key'] = 'thisismyreallylongawssectaccesskey'
-
-          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Metrics/LineLength
+          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Layout/LineLength
           runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['user'] = 'root'
 
           runner.node.default['system_core']['ssh']['user_config']['root']['keys']['id_rsa-chef-solo']['owner'] = 'root'
@@ -91,11 +81,6 @@ describe 'system_core::user_ssh' do
           expect_any_instance_of(Chef::Recipe).to receive(:ssh_authorize_key)
           chef_run
         end
-
-        it 'should create the SSH public/private key files' do
-          expect(chef_run).to create_s3_file('/root/.ssh/id_rsa-chef-solo')
-          expect(chef_run).to create_s3_file('/root/.ssh/id_rsa-chef-solo.pub')
-        end
       end
 
       context "On #{platform} #{version}, with custom SSH keys but missing AWS keys" do
@@ -106,10 +91,10 @@ describe 'system_core::user_ssh' do
         end
 
         let(:chef_run) do
-          runner = ChefSpec::SoloRunner.new(platform: platform, version: version)
+          runner = ChefSpec::SoloRunner.new(platform: platform, version: version, path: opts['fixture_path'])
           runner.node.default['environment'] = 'dev'
 
-          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Metrics/LineLength
+          runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['public_key'] = 'AAAAB3NzaC1yc2EAAAADAQABAAABAQDJlvaL0I0HWNE/RblFscFWhjXDwX6UaMBLtG5YdbHHSc1QQO+W+kV15q3T7WnED6In+aK423OzMTk/0/UZrchlxa2KCRNSnRrqViTZZ1XUXwEXqCnBQ9O1El93AAaE73suB9kYfeO105D5AgTTmf41HDc4YAxZtoAOt2KdI2GF7+7IfheI54aWSldmQesfqNloY+ivYIOhyEIwXuO9RS2BEbrFoxuVfOcz62AGcFz07EsALWGNzr4ngT6pe8vCbV5s/f0cDk5z9XZ4Wk2uQI7NQuLkSOmokU3QqZhOYJUjjTdq8VrjARWdF7K5N0/LQ/Wyx6Tgy+XRavnmj/SMhaKd' # rubocop:disable Layout/LineLength
           runner.node.default['system_core']['ssh']['authorized_keys']['root@mydomain.com']['user'] = 'root'
 
           runner.node.default['system_core']['ssh']['user_config']['root']['keys']['id_rsa-chef-solo']['owner'] = 'root'
@@ -126,10 +111,6 @@ describe 'system_core::user_ssh' do
         it 'should configure the SSH authorized keys' do
           expect_any_instance_of(Chef::Recipe).to receive(:ssh_authorize_key)
           chef_run
-        end
-        it 'should NOT create the SSH public/private key files' do
-          expect(chef_run).to_not create_s3_file('/root/.ssh/id_rsa-chef-solo')
-          expect(chef_run).to_not create_s3_file('/root/.ssh/id_rsa-chef-solo.pub')
         end
       end
     end

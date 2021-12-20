@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: system_core
+# Cookbook:: system_core
 # Recipe:: selinux
 #
-# Copyright (C) 2016 - 2020 Justin Spies
+# Copyright:: (C) 2016 - 2021 Justin Spies
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,4 +16,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-include_recipe 'selinux'
+include_recipe 'selinux::permissive'

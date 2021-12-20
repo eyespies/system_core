@@ -1,8 +1,8 @@
 #
-# Cookbook :: system_core
+# Cookbook:: system_core
 # Attributes :: logging
 #
-# Copyright (C) 2016 - 2020 Justin Spies
+# Copyright:: (C) 2016 - 2021 Justin Spies
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
