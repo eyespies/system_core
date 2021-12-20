@@ -75,10 +75,10 @@ end
 
 desc 'Run kitchen integration tests on AWS EC2'
 task :kitchen_ec2 do
-  concurrency = ENV['CONCURRENCY'] || 1
+  concurrency = ENV['CONCURRENCY'] || 4
   instance = ENV['INSTANCE'] || ''
   args = ENV['CI'] ? '--destroy=always' : ''
-  sh('sh', '-c', "bundle exec kitchen test -l debug -c #{concurrency} #{args} #{instance}")
+  sh('sh', '-c', "bundle exec kitchen test -l info -c #{concurrency} #{args} #{instance}")
 end
 
 desc 'Prepare CI environment for DigitalOcean usage'
