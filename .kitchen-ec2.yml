@@ -27,81 +27,6 @@ driver:
     - m5d.xlarge
   associate_public_ip: true
   interface: dns
-  # The default Oracle EC2 instance includes 'yum update -y' in the runcmd section; this causes problems when running Chef
-  # because the updating takes long enough that it is still running when Chef runs. This in turn causes any 'package'
-  # resources in Chef to fail because the RPM DB / Yum is already locked. The below is the Cloud Init taken directly from
-  # an Oracle EC2 instance.
-  user_data: |
-    #cloud-config
-    users:
-    - default
-
-    disable_root: 1
-    ssh_pwauth:   0
-
-    mount_default_fields: [~, ~, 'auto', 'defaults,nofail', '0', '2']
-    resize_rootfs_tmp: /dev
-    ssh_deletekeys:   0
-    ssh_genkeytypes:  ~
-    syslog_fix_perms: ~
-
-    cloud_init_modules:
-    - migrator
-    - bootcmd
-    - write-files
-    - growpart
-    - resizefs
-    - set_hostname
-    - update_hostname
-    - update_etc_hosts
-    - rsyslog
-    - users-groups
-    - ssh
-
-    cloud_config_modules:
-    - mounts
-    - locale
-    - set-passwords
-    - yum-add-repo
-    - package-update-upgrade-install
-    - timezone
-    - puppet
-    - chef
-    - salt-minion
-    - mcollective
-    - disable-ec2-metadata
-    - runcmd
-
-    cloud_final_modules:
-    - rightscale_userdata
-    - scripts-per-once
-    - scripts-per-boot
-    - scripts-per-instance
-    - scripts-user
-    - ssh-authkey-fingerprints
-    - keys-to-console
-    - phone-home
-    - final-message
-
-    system_info:
-      default_user:
-        name: ec2-user
-        lock_passwd: true
-        gecos: Cloud User
-        groups: [wheel, adm, systemd-journal]
-        sudo: ["ALL=(ALL) NOPASSWD:ALL"]
-        shell: /bin/bash
-      distro: rhel
-      paths:
-        cloud_dir: /var/lib/cloud
-        templates_dir: /etc/cloud/templates
-      ssh_svcname: sshd
-
-    runcmd:
-      ["test -e /usr/bin/ol_yum_configure.sh && sh /usr/bin/ol_yum_configure.sh"]
-
-    # vim:syntax=yaml
-
 
 transport:
   ssh_key: "<%= ENV.has_key?('SSH_PRIVATE_KEY') ? ENV['SSH_PRIVATE_KEY'] : '~/.ssh/id_rsa' %>"
@@ -127,25 +52,34 @@ verifier:
 platforms:
   - name: ubuntu-18.04
     driver:
-      image_search:
-        owner-id: "099720109477"
-        name: "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04"
+      platform: "ubuntu-18.04"
+      block_device_mappings:
+        - device_name: /dev/sda1
+          ebs:
+            volume_size: 32
+            delete_on_termination: true
     transport:
       username: ubuntu
   - name: ubuntu-20.04
     driver:
-      image_search:
-        owner-id: "099720109477"
-        name: "ubuntu/images/hvm-ssd/ubuntu-focal-20.04"
+      platform: "ubuntu-20.04"
+      block_device_mappings:
+        - device_name: /dev/sda1
+          ebs:
+            volume_size: 32
+            delete_on_termination: true
     transport:
       username: ubuntu
   - name: centos-7
     driver:
+      platform: "centos-7"
       # To see a list of CentOS images, use the command below
       # `aws ec2 describe-images --owners 679593333241 --filters 'Name=is-public,Values=true' --filters 'Name=virtualization-type,Values=hvm' | jq -r '.Images |=sort_by(.CreationDate) | .Images[] | select(.Name | test("^CentOS Linux 7 x86_64")) | { Desc: .Description, Name: .Name, ImageId: .ImageId, Created: .CreationDate}'`
-      image_search:
-        owner-id: "679593333241"
-        name: "CentOS Stream 7 x86_64"
+      block_device_mappings:
+        - device_name: /dev/sda1
+          ebs:
+            volume_size: 32
+            delete_on_termination: true
     transport:
       username: centos
   - name: centos-8
@@ -155,6 +89,11 @@ platforms:
       image_search:
         owner-id: "125523088429"
         name: "CentOS Stream 8 x86_64"
+      block_device_mappings:
+        - device_name: /dev/sda1
+          ebs:
+            volume_size: 32
+            delete_on_termination: true
     transport:
       username: centos
   - name: oracle-7
