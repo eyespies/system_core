@@ -23,16 +23,16 @@ node.default['system_core']['repos']['ol7']['base_latest']['enabled'] = true
 node.default['system_core']['repos']['ol7']['base_latest']['url']     = 'https://yum.oracle.com/repo/OracleLinux/OL7/latest/$basearch/'
 
 node.default['system_core']['repos']['ol7']['uek4_latest']['name']    = 'ol7_uek4_latest'
-node.default['system_core']['repos']['ol7']['uek4_latest']['enabled'] = true
+node.default['system_core']['repos']['ol7']['uek4_latest']['enabled'] = false
 node.default['system_core']['repos']['ol7']['uek4_latest']['url']     = 'https://yum.oracle.com/repo/OracleLinux/OL7/UEKR4/$basearch/'
 
 node.default['system_core']['repos']['ol7']['uek5_latest']['name']    = 'ol7_uek5_latest'
-node.default['system_core']['repos']['ol7']['uek5_latest']['enabled'] = true
+node.default['system_core']['repos']['ol7']['uek5_latest']['enabled'] = false
 node.default['system_core']['repos']['ol7']['uek5_latest']['url']     = 'https://yum.oracle.com/repo/OracleLinux/OL7/UEKR5/$basearch/'
 
 node.default['system_core']['repos']['ol7']['uek6_latest']['name']    = 'ol7_uek6_latest'
 node.default['system_core']['repos']['ol7']['uek6_latest']['enabled'] = true
-node.default['system_core']['repos']['ol7']['uek6_latest']['url']     = 'https://yum.oracle.com/repo/OracleLinux/OL7/UEKR5/$basearch/'
+node.default['system_core']['repos']['ol7']['uek6_latest']['url']     = 'https://yum.oracle.com/repo/OracleLinux/OL7/UEKR6/$basearch/'
 
 # Required so that python-cheetah / python-pygments installs successfully. CentOS automatically provides
 # access to python-pygments while RHEL and Oracle put it into the 'optional' repo which is disabled by default

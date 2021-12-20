@@ -162,6 +162,11 @@ platforms:
       # To find the image ID for Oracle instances, use the command below, making sure to replace the 'OL7.6' with the correct name prefix
       # `aws ec2 describe-images --owners 131827586825 --filters 'Name=is-public,Values=true' --filters 'Name=virtualization-type,Values=hvm' | jq -r '.Images |=sort_by(.CreationDate) | .Images[] | select(.Name | test("^OL7")) | { Desc: .Description, Name: .Name, ImageId: .ImageId, Created: .CreationDate}'`
       image_id: "<%= ENV['PLATFORMS_ORACLE7_DRIVER_IMAGEID'] %>"
+      block_device_mappings:
+        - device_name: /dev/sda1
+          ebs:
+            volume_size: 32
+            delete_on_termination: true
     transport:
       username: ec2-user
   - name: oracle-8
@@ -176,6 +181,11 @@ platforms:
       #   name: "OL7.6-X86_64-HVM-*"
       #   owner-id: "131827586825"
       #   virtualization-type: "hvm"
+      block_device_mappings:
+        - device_name: /dev/sda1
+          ebs:
+            volume_size: 32
+            delete_on_termination: true
     transport:
       username: ec2-user
 
