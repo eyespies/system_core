@@ -28,7 +28,7 @@ group :rake do
 end
 
 group :lint do
-  gem 'rubocop', '~> 1.22.0'
+  gem 'cookstyle', '~> 7.25.0'
 end
 
 group :unit do
@@ -46,9 +46,12 @@ group :kitchen_common do
   gem 'test-kitchen', '~> 3.1.0'
 end
 
-group :kitchen_vagrant do
+group :kitchen_cloud do
   gem 'kitchen-dokken', '~> 2.16.0'
   gem 'kitchen-ec2', '~> 3.11.0'
+end
+
+group :kitchen_vagrant do
   gem 'kitchen-vagrant', '~> 1.10.0'
 end
 
